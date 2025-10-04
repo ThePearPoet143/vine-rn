@@ -96,18 +96,105 @@ The `@master-document` folder contains:
 ## Version Control
 
 ### Branch Strategy
-- `main`: Production-ready code
-- Feature branches: Short-lived, focused changes
-- Clear branch naming: `feature/user-auth`, `fix/login-bug`
+
+This project follows Git Flow with three permanent branches:
+
+**Permanent Branches:**
+- `main` - Production releases (App Store)
+- `qa` - QA/staging environment (TestFlight)
+- `develop` - Active development integration
+
+**Temporary Branches:**
+- `feature/*` - New features (from `develop`)
+- `bugfix/*` - Bug fixes (from `develop`)
+- `hotfix/*` - Emergency production fixes (from `main`)
+
+**Branch Naming:**
+- Use lowercase with hyphens
+- Be descriptive but concise
+- Include ticket/issue number if applicable
+- Examples: `feature/oauth-login`, `bugfix/navigation-crash`, `hotfix/memory-leak`
+
+**Workflow:**
+```
+feature/new-feature → develop → qa → main
+       (dev)          (int)   (QA) (Prod)
+```
+
+See [branching-strategy.md](branching-strategy.md) for complete details.
 
 ### Pull Requests
-- Clear, descriptive titles
-- Link to related issues
-- Include test plan or verification steps
+
+**PR Title Format:**
+```
+<type>: <description>
+```
+
+**Types:**
+- feat: New feature
+- fix: Bug fix
+- docs: Documentation
+- refactor: Code refactoring
+- test: Tests
+- chore: Maintenance
+
+**PR Requirements:**
+- Clear, descriptive title following format above
+- Detailed description of changes
+- Link to related issues/tickets
+- Test plan or verification steps
+- No merge conflicts
+- All CI checks passing
+- At least 1 approval (for develop)
+- QA/PO approval (for qa → main)
+
+**PR Best Practices:**
 - Keep PRs focused and reasonably sized
+- Review your own PR first
+- Respond to feedback promptly
+- Update PR description if scope changes
 
 ### Git Practices
+
+**DO:**
 - Commit related changes together
-- Write clear commit messages
-- Avoid committing sensitive data
-- Keep commit history clean
+- Write clear, descriptive commit messages
+- Follow conventional commit format
+- Keep commits atomic and focused
+- Pull latest changes before starting work
+- Rebase feature branches regularly
+- Delete branches after merge
+
+**DON'T:**
+- Commit directly to main, qa, or develop
+- Commit sensitive data (.env files, secrets, keys)
+- Force push to shared branches
+- Mix unrelated changes in one commit
+- Commit commented-out code
+- Leave TODO comments without tickets
+
+**Commit Message Format:**
+```
+<type>: <subject>
+
+<body>
+
+<footer>
+```
+
+Example:
+```
+feat: Add user authentication
+
+Implement OAuth login flow with Google and Apple Sign In.
+Includes token refresh logic and secure storage.
+
+Closes VINE-123
+```
+
+### Environment Variables
+
+- Use `.env.example` as template
+- Never commit `.env` files with real values
+- Document all environment variables
+- Use different values per environment (dev, qa, prod)

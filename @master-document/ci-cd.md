@@ -7,7 +7,9 @@ This document outlines the complete CI/CD pipeline for the Vine mobile applicati
 ## Table of Contents
 
 - [Build Profiles](#build-profiles)
+- [Branching Strategy](#branching-strategy)
 - [Development Workflow](#development-workflow)
+- [QA Deployment](#qa-deployment)
 - [Production Deployment](#production-deployment)
 - [TestFlight Distribution](#testflight-distribution)
 - [Troubleshooting](#troubleshooting)
@@ -16,7 +18,7 @@ This document outlines the complete CI/CD pipeline for the Vine mobile applicati
 
 ## Build Profiles
 
-The project uses EAS (Expo Application Services) with three build profiles defined in `eas.json`:
+The project uses EAS (Expo Application Services) with four build profiles defined in `eas.json`:
 
 ### 1. Development Profile
 ```json
@@ -43,7 +45,42 @@ eas build --profile development --platform ios
 
 ---
 
-### 2. Preview Profile
+### 2. QA Profile
+```json
+"qa": {
+  "distribution": "internal",
+  "env": {
+    "APP_ENV": "qa"
+  },
+  "channel": "qa"
+}
+```
+
+**Purpose:** Quality assurance and staging environment
+**Distribution:** Internal (can also be App Store for TestFlight)
+**Use case:** QA testing before production release
+**Git Branch:** `qa`
+
+**Build command:**
+```bash
+eas build --profile qa --platform ios
+```
+
+**Characteristics:**
+- Production-like build with QA environment settings
+- Can be distributed via TestFlight for broader QA team testing
+- Includes APP_ENV variable for environment-specific configuration
+- Uses dedicated QA update channel
+- Suitable for regression testing and stakeholder demos
+
+**When to use:**
+- After features are merged to `qa` branch
+- Before promoting to production
+- For formal QA testing cycles
+
+---
+
+### 3. Preview Profile
 ```json
 "preview": {
   "distribution": "internal"
@@ -67,7 +104,7 @@ eas build --profile preview --platform ios
 
 ---
 
-### 3. Production Profile
+### 4. Production Profile
 ```json
 "production": {
   "autoIncrement": true
@@ -88,6 +125,31 @@ eas build --profile production --platform ios
 - Auto-increments build number
 - Suitable for TestFlight and App Store
 - No development tools included
+
+---
+
+## Branching Strategy
+
+The project follows a Git Flow branching strategy with three permanent branches:
+
+### Branch Overview
+
+```
+feature/* → develop → qa → main
+   (dev)     (int)   (QA)  (Prod)
+```
+
+**Permanent Branches:**
+- `main` - Production releases (App Store)
+- `qa` - QA/staging environment (TestFlight QA)
+- `develop` - Active development integration
+
+**Temporary Branches:**
+- `feature/*` - New features (branch from `develop`)
+- `bugfix/*` - Bug fixes (branch from `develop`)
+- `hotfix/*` - Emergency production fixes (branch from `main`)
+
+See [branching-strategy.md](branching-strategy.md) for complete workflow details.
 
 ---
 
@@ -135,6 +197,79 @@ Rebuild the development client when you:
 - Modify `app.json` or `eas.json`
 - Change native configuration (iOS permissions, etc.)
 - Update Expo SDK version
+
+---
+
+## QA Deployment
+
+The QA deployment process ensures thorough testing before production release.
+
+### QA Branch Workflow
+
+1. **Merge Features to Develop**
+   ```bash
+   # All features for the release should be merged to develop first
+   git checkout develop
+   git pull origin develop
+   ```
+
+2. **Create PR from Develop to QA**
+   - On GitHub, create Pull Request: `develop` → `qa`
+   - Add release notes and changelog to PR description
+   - Tag QA team and stakeholders for review
+   - Ensure all CI checks pass
+
+3. **Merge to QA Branch**
+   ```bash
+   git checkout qa
+   git pull origin qa
+   ```
+
+### Building QA Version
+
+1. **Build for QA**
+   ```bash
+   eas build --profile qa --platform ios
+   ```
+
+2. **Monitor Build**
+   - Build runs on EAS cloud servers (~5-10 minutes)
+   - View progress at EAS dashboard
+   - Build includes `APP_ENV=qa` environment variable
+
+3. **Optional: Submit to TestFlight**
+   ```bash
+   eas submit --platform ios --profile qa
+   ```
+   This allows broader QA team testing via TestFlight.
+
+### QA Testing Cycle
+
+**Testing Checklist:**
+- Functional testing of all new features
+- Regression testing of existing features
+- Performance testing
+- UI/UX review
+- Edge case and error handling verification
+- Cross-device testing (if applicable)
+
+**Issue Resolution:**
+1. Bugs found during QA → Create `bugfix/*` branch from `develop`
+2. Fix bug on feature branch
+3. PR to `develop`
+4. Rebuild QA after fixes merged
+5. Re-test until all issues resolved
+
+**QA Sign-off:**
+- QA team approves build
+- Product owner reviews
+- Ready to promote to production
+
+### Promoting to Production
+
+Once QA is complete and approved:
+1. Create PR: `qa` → `main`
+2. Follow [Production Deployment](#production-deployment) process
 
 ---
 

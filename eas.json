@@ -8,14 +8,27 @@
       "developmentClient": true,
       "distribution": "internal"
     },
+    "qa": {
+      "distribution": "internal",
+      "env": {
+        "APP_ENV": "qa"
+      },
+      "channel": "qa"
+    },
     "preview": {
       "distribution": "internal"
     },
     "production": {
-      "autoIncrement": true
+      "autoIncrement": true,
+      "channel": "production"
     }
   },
   "submit": {
+    "qa": {
+      "ios": {
+        "appleTeamId": "your-apple-team-id"
+      }
+    },
     "production": {}
   }
 }
