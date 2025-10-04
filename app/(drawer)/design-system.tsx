@@ -5,9 +5,11 @@ import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Alert } from '@/components/ui/alert';
 import { Typography } from '@/components/ui/typography';
-import { useFontContext, type FontFamily } from '@/contexts/font-context';
-import { useThemeContext } from '@/contexts/theme-context';
+import { SettingsList } from '@/components/ui/settings-list';
+import { SectionHeader } from '@/components/ui/section-header';
+import { useFontContext, useThemeContext, type FontFamily } from '@/contexts/preferences-context';
 import { type ThemeMode, Themes } from '@/constants/themes';
+import { getAccentBlue } from '@/constants/colors';
 
 type Language = 'en' | 'zh';
 
@@ -265,114 +267,66 @@ export default function DesignSystemScreen() {
         </View>
 
         {/* Reading Theme Picker */}
-        <View style={{ backgroundColor: colors.cardBackground }} className="p-ios-md rounded-ios-lg mb-ios-md">
-          <Typography variant="title-3" weight="semibold" className="mb-ios-sm">
-            {t.readingTheme}
-          </Typography>
-          <View className="gap-ios-xs mb-ios-md">
-            {(['auto', 'light', 'dark', 'sepia', 'warm-dark', 'green'] as ThemeMode[]).map((mode) => {
-              const isActive = themeMode === mode;
-              const themeColors = mode === 'auto' ? colors : Themes[mode as Exclude<ThemeMode, 'auto'>];
+        <View style={{ marginBottom: 24 }}>
+          <SectionHeader title={t.readingTheme} uppercase={false} bottomMargin={8} />
+          <SettingsList>
+            <SettingsList.Section>
+              {(['auto', 'light', 'dark', 'sepia', 'warm-dark', 'green'] as ThemeMode[]).map((mode, index, arr) => {
+                const themeColors = mode === 'auto' ? colors : Themes[mode as Exclude<ThemeMode, 'auto'>];
+                const themeLabel = mode === 'auto' ? t.auto :
+                                 mode === 'light' ? t.light :
+                                 mode === 'dark' ? t.dark :
+                                 mode === 'sepia' ? t.sepia :
+                                 mode === 'warm-dark' ? t.warmDark :
+                                 t.green;
 
-              return (
-                <Pressable
-                  key={mode}
-                  onPress={() => setThemeMode(mode)}
-                  style={{
-                    backgroundColor: isActive ? colors.text : colors.secondaryBackground,
-                    borderWidth: 2,
-                    borderColor: isActive ? colors.text : colors.border,
-                  }}
-                  className="p-ios-md rounded-ios-md flex-row items-center justify-between"
-                >
-                  <View className="flex-row items-center gap-ios-sm flex-1">
-                    {/* Theme color preview swatch */}
-                    {mode !== 'auto' && (
-                      <View
-                        style={{ backgroundColor: themeColors.background }}
-                        className="w-[40px] h-[40px] rounded-ios-sm"
-                      >
-                        <View className="flex-1 items-center justify-center">
-                          <Typography
-                            variant="caption-1"
-                            weight="semibold"
-                            style={{ color: themeColors.text }}
-                          >
-                            Aa
-                          </Typography>
-                        </View>
-                      </View>
-                    )}
-                    <View className="flex-1">
-                      <Typography
-                        variant="body"
-                        weight={isActive ? 'semibold' : 'medium'}
-                        style={{ color: isActive ? colors.background : colors.text }}
-                      >
-                        {mode === 'auto' ? t.auto :
-                         mode === 'light' ? t.light :
-                         mode === 'dark' ? t.dark :
-                         mode === 'sepia' ? t.sepia :
-                         mode === 'warm-dark' ? t.warmDark :
-                         t.green}
-                      </Typography>
-                      {mode !== 'auto' && (
-                        <Typography
-                          variant="caption-1"
-                          style={{ color: isActive ? colors.background : colors.secondaryText }}
-                        >
-                          {themeColors.description} • {themeColors.contrastRatio}
-                        </Typography>
-                      )}
-                    </View>
-                  </View>
-                  {isActive && (
-                    <Typography variant="headline" style={{ color: colors.background }}>
-                      ✓
-                    </Typography>
-                  )}
-                </Pressable>
-              );
-            })}
+                return (
+                  <SettingsList.Item
+                    key={mode}
+                    title={themeLabel}
+                    subtitle={mode !== 'auto' ? `${themeColors.description} • ${themeColors.contrastRatio}` : undefined}
+                    titleWeight="semibold"
+                    accessory="radio"
+                    selected={themeMode === mode}
+                    onPress={() => setThemeMode(mode)}
+                    showSeparator={index < arr.length - 1}
+                  />
+                );
+              })}
+            </SettingsList.Section>
+          </SettingsList>
+          <View style={{ marginTop: 8, paddingHorizontal: 0 }}>
+            <Typography variant="footnote" color="secondary">
+              {t.allThemesWCAG}
+            </Typography>
           </View>
-          <Typography variant="footnote" color="tertiary">
-            {t.allThemesWCAG}
-          </Typography>
         </View>
 
         {/* Font Family Switcher */}
-        <View style={{ backgroundColor: colors.cardBackground }} className="p-ios-md rounded-ios-lg mb-ios-md">
-          <Typography variant="title-3" weight="semibold" className="mb-ios-sm">
-            {t.fontFamily}
-          </Typography>
-          <View className="flex-row gap-ios-xs mb-ios-lg">
-            {(['system', 'serif', 'mono'] as FontFamily[]).map((font) => (
-              <Pressable
-                key={font}
-                onPress={() => setFontFamily(font)}
-                style={{
-                  backgroundColor: fontFamily === font ? '#007AFF' : colors.secondaryBackground,
-                }}
-                className="flex-1 py-ios-sm px-ios-md rounded-ios-md"
-              >
-                <Typography
-                  variant="body"
-                  weight="medium"
-                  style={{ color: fontFamily === font ? '#FFFFFF' : colors.text }}
-                  className="text-center"
-                >
-                  {font === 'system' ? t.system : font === 'serif' ? t.serif : t.mono}
-                </Typography>
-              </Pressable>
-            ))}
-          </View>
+        <View style={{ marginBottom: 24 }}>
+          <SectionHeader title={t.fontFamily} uppercase={false} bottomMargin={8} />
+          <SettingsList>
+            <SettingsList.Section>
+              {(['system', 'serif', 'mono'] as FontFamily[]).map((font, index, arr) => (
+                <SettingsList.Item
+                  key={font}
+                  title={font === 'system' ? t.system : font === 'serif' ? t.serif : t.mono}
+                  titleWeight="semibold"
+                  accessory="radio"
+                  selected={fontFamily === font}
+                  onPress={() => setFontFamily(font)}
+                  showSeparator={index < arr.length - 1}
+                />
+              ))}
+            </SettingsList.Section>
+          </SettingsList>
+        </View>
 
-          {/* Font Size Slider */}
-          <Typography variant="title-3" weight="semibold" className="mb-ios-sm">
-            {t.fontSize}: {Math.round(fontSize * 100)}%
-          </Typography>
-          <View className="mb-ios-md">
-            <View className="flex-row items-center gap-ios-sm">
+        {/* Font Size */}
+        <View style={{ marginBottom: 24 }}>
+          <SectionHeader title={`${t.fontSize}: ${Math.round(fontSize * 100)}%`} uppercase={false} bottomMargin={8} />
+          <Card variant="inset-grouped">
+            <View className="flex-row items-center gap-ios-sm" style={{ padding: 16 }}>
               <Pressable
                 onPress={() => setFontSize(Math.max(0.5, fontSize - 0.1))}
                 style={{ backgroundColor: colors.secondaryBackground }}
@@ -384,7 +338,7 @@ export default function DesignSystemScreen() {
               <View className="flex-1 min-h-[44px] justify-center px-ios-sm">
                 <View style={{ backgroundColor: colors.secondaryBackground }} className="h-[6px] rounded-full overflow-hidden">
                   <View
-                    style={{ backgroundColor: '#007AFF', width: `${((fontSize - 0.5) / 1.5) * 100}%` }}
+                    style={{ backgroundColor: getAccentBlue(colors.isDark), width: `${((fontSize - 0.5) / 1.5) * 100}%` }}
                     className="h-full rounded-full"
                   />
                 </View>
@@ -398,49 +352,52 @@ export default function DesignSystemScreen() {
                 <Typography variant="title-2" weight="semibold">+</Typography>
               </Pressable>
             </View>
-            <View className="flex-row justify-between mt-ios-xs px-ios-sm">
+            <View className="flex-row justify-between px-ios-md pb-ios-xs">
               <Typography variant="caption-2" color="tertiary">50%</Typography>
               <Typography variant="caption-2" color="tertiary">100%</Typography>
               <Typography variant="caption-2" color="tertiary">200%</Typography>
             </View>
-          </View>
-
-          <Typography variant="footnote" color="tertiary" className="mb-ios-md">
-            {t.fontSizeWorks}
-          </Typography>
-
-          <View style={{ backgroundColor: colors.secondaryBackground }} className="p-ios-md rounded-ios-md">
-            <Typography variant="body" className="italic text-center">
-              {t.bibleVerse}
+          </Card>
+          <View style={{ marginTop: 8 }}>
+            <Typography variant="footnote" color="secondary">
+              {t.fontSizeWorks}
             </Typography>
           </View>
         </View>
 
+        {/* Preview */}
+        <View style={{ marginBottom: 24 }}>
+          <SectionHeader title="PREVIEW" uppercase bottomMargin={8} />
+          <Card variant="inset-grouped" style={{ padding: 16 }}>
+            <Typography variant="body" className="text-center">
+              {t.bibleVerse}
+            </Typography>
+          </Card>
+        </View>
+
         {/* Device Info */}
-        <Card variant="inset-grouped" className="mb-ios-md">
-          <Typography variant="title-3" weight="semibold" className="mb-ios-sm">
-            {t.deviceInfo}
-          </Typography>
-          <View className="gap-ios-xs">
-            <Typography variant="body" color="secondary">
-              <Typography variant="body" weight="semibold">{t.screenWidth}:</Typography> {width.toFixed(0)}px
-            </Typography>
-            <Typography variant="body" color="secondary">
-              <Typography variant="body" weight="semibold">{t.typography}:</Typography> SF Pro (Dynamic Type)
-            </Typography>
-            <Typography variant="body" color="secondary">
-              <Typography variant="body" weight="semibold">{t.colorSystem}:</Typography> iOS Semantic Colors
-            </Typography>
-          </View>
-        </Card>
+        <View style={{ marginBottom: 24 }}>
+          <SectionHeader title={t.deviceInfo} uppercase={false} bottomMargin={8} />
+          <Card variant="inset-grouped" style={{ padding: 16 }}>
+            <View className="gap-ios-xs">
+              <Typography variant="body" color="secondary">
+                <Typography variant="body" weight="semibold">{t.screenWidth}:</Typography> {width.toFixed(0)}px
+              </Typography>
+              <Typography variant="body" color="secondary">
+                <Typography variant="body" weight="semibold">{t.typography}:</Typography> SF Pro (Dynamic Type)
+              </Typography>
+              <Typography variant="body" color="secondary">
+                <Typography variant="body" weight="semibold">{t.colorSystem}:</Typography> iOS Semantic Colors
+              </Typography>
+            </View>
+          </Card>
+        </View>
 
         {/* Dynamic Type Demo */}
-        <View className="mb-ios-lg">
-          <Typography variant="title-2" weight="bold" className="mb-ios-sm">
-            {t.iosDynamicType}
-          </Typography>
-          <Card variant="inset-grouped" className="gap-ios-sm">
-            <Typography variant="body" color="secondary">
+        <View style={{ marginBottom: 24 }}>
+          <SectionHeader title={t.iosDynamicType} uppercase={false} bottomMargin={8} />
+          <Card variant="inset-grouped" style={{ padding: 16 }}>
+            <Typography variant="body" color="secondary" style={{ marginBottom: 12 }}>
               {t.dynamicTypeDesc}
             </Typography>
             <Alert type="info" title={t.accessibilitySupport}>
@@ -450,11 +407,9 @@ export default function DesignSystemScreen() {
         </View>
 
         {/* Typography */}
-        <View className="mb-ios-lg">
-          <Typography variant="title-2" weight="bold" className="mb-ios-sm">
-            {t.sfProTypography}
-          </Typography>
-          <Card variant="inset-grouped" className="gap-ios-sm">
+        <View style={{ marginBottom: 24 }}>
+          <SectionHeader title={t.sfProTypography} uppercase={false} bottomMargin={8} />
+          <Card variant="inset-grouped" style={{ padding: 16 }} className="gap-ios-sm">
             <Typography variant="large-title" weight="bold">
               {t.largeTitle}
             </Typography>
@@ -482,11 +437,9 @@ export default function DesignSystemScreen() {
         </View>
 
         {/* iOS System Colors */}
-        <View className="mb-ios-lg">
-          <Typography variant="title-2" weight="bold" className="mb-ios-sm">
-            {t.iosSystemColors}
-          </Typography>
-          <Card variant="inset-grouped" className="gap-ios-md">
+        <View style={{ marginBottom: 24 }}>
+          <SectionHeader title={t.iosSystemColors} uppercase={false} bottomMargin={8} />
+          <Card variant="inset-grouped" style={{ padding: 16 }} className="gap-ios-md">
             <View>
               <Typography variant="headline" weight="semibold" className="mb-ios-xs">
                 {t.primaryColors}
@@ -550,11 +503,9 @@ export default function DesignSystemScreen() {
         </View>
 
         {/* Buttons */}
-        <View className="mb-ios-lg">
-          <Typography variant="title-2" weight="bold" className="mb-ios-sm">
-            {t.iosButtons}
-          </Typography>
-          <Card variant="inset-grouped" className="gap-ios-sm">
+        <View style={{ marginBottom: 24 }}>
+          <SectionHeader title={t.iosButtons} uppercase={false} bottomMargin={8} />
+          <Card variant="inset-grouped" style={{ padding: 16 }} className="gap-ios-sm">
             <Typography variant="headline" weight="semibold" className="mb-ios-xs">
               {t.buttonStyles}
             </Typography>
@@ -592,11 +543,9 @@ export default function DesignSystemScreen() {
         </View>
 
         {/* Badges */}
-        <View className="mb-ios-lg">
-          <Typography variant="title-2" weight="bold" className="mb-ios-sm">
-            {t.badges}
-          </Typography>
-          <Card variant="inset-grouped">
+        <View style={{ marginBottom: 24 }}>
+          <SectionHeader title={t.badges} uppercase={false} bottomMargin={8} />
+          <Card variant="inset-grouped" style={{ padding: 16 }}>
             <View className="flex-row flex-wrap gap-ios-xs">
               <Badge color="blue">{t.blue}</Badge>
               <Badge color="green">{t.green}</Badge>
@@ -609,10 +558,8 @@ export default function DesignSystemScreen() {
         </View>
 
         {/* Alerts */}
-        <View className="mb-ios-lg">
-          <Typography variant="title-2" weight="bold" className="mb-ios-sm">
-            {t.alerts}
-          </Typography>
+        <View style={{ marginBottom: 24 }}>
+          <SectionHeader title={t.alerts} uppercase={false} bottomMargin={8} />
           <View className="gap-ios-sm">
             <Alert type="success" title={t.success}>
               {t.successMsg}
@@ -630,12 +577,10 @@ export default function DesignSystemScreen() {
         </View>
 
         {/* Cards */}
-        <View className="mb-ios-lg">
-          <Typography variant="title-2" weight="bold" className="mb-ios-sm">
-            {t.cards}
-          </Typography>
+        <View style={{ marginBottom: 24 }}>
+          <SectionHeader title={t.cards} uppercase={false} bottomMargin={8} />
           <View className="gap-ios-sm">
-            <Card variant="grouped">
+            <Card variant="grouped" style={{ padding: 16 }}>
               <Typography variant="headline" weight="semibold" className="mb-ios-xs">
                 {t.groupedCard}
               </Typography>
@@ -644,7 +589,7 @@ export default function DesignSystemScreen() {
               </Typography>
             </Card>
 
-            <Card variant="inset-grouped">
+            <Card variant="inset-grouped" style={{ padding: 16 }}>
               <Typography variant="headline" weight="semibold" className="mb-ios-xs">
                 {t.insetGroupedCard}
               </Typography>
@@ -653,7 +598,7 @@ export default function DesignSystemScreen() {
               </Typography>
             </Card>
 
-            <Card variant="plain">
+            <Card variant="plain" style={{ padding: 16 }}>
               <Typography variant="headline" weight="semibold" className="mb-ios-xs">
                 {t.plainCard}
               </Typography>
@@ -665,11 +610,9 @@ export default function DesignSystemScreen() {
         </View>
 
         {/* Spacing System */}
-        <View className="mb-ios-lg">
-          <Typography variant="title-2" weight="bold" className="mb-ios-sm">
-            {t.spacingSystem}
-          </Typography>
-          <Card variant="inset-grouped" className="gap-ios-xs">
+        <View style={{ marginBottom: 24 }}>
+          <SectionHeader title={t.spacingSystem} uppercase={false} bottomMargin={8} />
+          <Card variant="inset-grouped" style={{ padding: 16 }} className="gap-ios-xs">
             <Typography variant="footnote" color="secondary" className="mb-ios-sm">
               {t.spacingDesc}
             </Typography>
@@ -707,11 +650,9 @@ export default function DesignSystemScreen() {
         </View>
 
         {/* Border Radius */}
-        <View className="mb-ios-lg">
-          <Typography variant="title-2" weight="bold" className="mb-ios-sm">
-            {t.borderRadius}
-          </Typography>
-          <Card variant="inset-grouped">
+        <View style={{ marginBottom: 24 }}>
+          <SectionHeader title={t.borderRadius} uppercase={false} bottomMargin={8} />
+          <Card variant="inset-grouped" style={{ padding: 16 }}>
             <Typography variant="footnote" color="secondary" className="mb-ios-sm">
               {t.borderRadiusDesc}
             </Typography>

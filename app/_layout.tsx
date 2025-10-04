@@ -6,8 +6,7 @@ import '../global.css';
 
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { FontScaleMonitor } from '@/components/font-scale-monitor';
-import { FontProvider } from '@/contexts/font-context';
-import { ThemeProvider, useThemeContext } from '@/contexts/theme-context';
+import { PreferencesProvider, useThemeContext } from '@/contexts/preferences-context';
 
 export const unstable_settings = {
   anchor: '(drawer)',
@@ -43,10 +42,8 @@ function RootLayoutNav() {
 
 export default function RootLayout() {
   return (
-    <ThemeProvider>
-      <FontProvider>
-        <RootLayoutNav />
-      </FontProvider>
-    </ThemeProvider>
+    <PreferencesProvider>
+      <RootLayoutNav />
+    </PreferencesProvider>
   );
 }

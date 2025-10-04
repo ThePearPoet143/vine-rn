@@ -1,5 +1,5 @@
 import Animated from 'react-native-reanimated';
-import { useFontContext } from '@/contexts/font-context';
+import { useFontContext } from '@/contexts/preferences-context';
 
 export function HelloWave() {
   const { fontSize: fontSizeMultiplier } = useFontContext();

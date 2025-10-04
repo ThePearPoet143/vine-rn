@@ -47,7 +47,7 @@ export const LightTheme: ThemeColors = {
   text: '#000000',
 
   secondaryBackground: '#F2F2F7',
-  secondaryText: 'rgba(60, 60, 67, 0.6)',
+  secondaryText: 'rgba(60, 60, 67, 0.75)',
   tertiaryText: 'rgba(60, 60, 67, 0.3)',
 
   cardBackground: '#FFFFFF',
@@ -73,7 +73,7 @@ export const DarkTheme: ThemeColors = {
   text: '#FFFFFF',
 
   secondaryBackground: '#1C1C1E',
-  secondaryText: 'rgba(235, 235, 245, 0.6)',
+  secondaryText: 'rgba(235, 235, 245, 0.75)',
   tertiaryText: 'rgba(235, 235, 245, 0.3)',
 
   cardBackground: '#1C1C1E',
@@ -100,7 +100,7 @@ export const SepiaTheme: ThemeColors = {
   text: '#5F4B32',
 
   secondaryBackground: '#F5E6C8',
-  secondaryText: 'rgba(95, 75, 50, 0.7)',
+  secondaryText: 'rgba(95, 75, 50, 0.8)',
   tertiaryText: 'rgba(95, 75, 50, 0.4)',
 
   cardBackground: '#FEFBF3',
@@ -126,7 +126,7 @@ export const WarmDarkTheme: ThemeColors = {
   text: '#E8D5B5',
 
   secondaryBackground: '#2A221A',
-  secondaryText: 'rgba(232, 213, 181, 0.7)',
+  secondaryText: 'rgba(232, 213, 181, 0.8)',
   tertiaryText: 'rgba(232, 213, 181, 0.4)',
 
   cardBackground: '#2A221A',
@@ -152,7 +152,7 @@ export const GreenTheme: ThemeColors = {
   text: '#1B4D3E',
 
   secondaryBackground: '#C8DCC7',
-  secondaryText: 'rgba(27, 77, 62, 0.7)',
+  secondaryText: 'rgba(27, 77, 62, 0.8)',
   tertiaryText: 'rgba(27, 77, 62, 0.4)',
 
   cardBackground: '#E8F5E7',

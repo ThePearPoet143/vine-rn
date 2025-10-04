@@ -1,0 +1,121 @@
+import React from 'react';
+import { create } from 'zustand';
+import { useColorScheme } from 'react-native';
+import { getThemeColors, type ThemeColors } from '@/constants/themes';
+import { createThemeSlice, type ThemeSlice } from './slices/theme-slice';
+import { createFontSlice, type FontSlice } from './slices/font-slice';
+import { createLanguageSlice, type LanguageSlice } from './slices/language-slice';
+
+// Re-export types for convenience
+export type { FontFamily } from './slices/font-slice';
+export type { Language } from './slices/language-slice';
+export { LANGUAGE_LABELS } from './slices/language-slice';
+
+/**
+ * Combined preferences store using Zustand slices pattern
+ *
+ * Consolidates all user appearance preferences:
+ * - Theme (reading themes, dark mode, auto mode)
+ * - Font (family, size scaling)
+ * - Language (en, zh)
+ *
+ * Benefits:
+ * - Single source of truth for all preferences
+ * - Atomic updates (all preferences load/save together)
+ * - Better performance (single subscription vs 3 nested contexts)
+ * - Easy to add persistence with zustand middleware
+ */
+type PreferencesStore = ThemeSlice & FontSlice & LanguageSlice;
+
+export const usePreferencesStore = create<PreferencesStore>()((...a) => ({
+  ...createThemeSlice(...a),
+  ...createFontSlice(...a),
+  ...createLanguageSlice(...a),
+}));
+
+/**
+ * Hook to access all preferences with computed values
+ *
+ * Adds computed theme colors based on theme mode and system preference
+ *
+ * @example
+ * ```tsx
+ * function MyComponent() {
+ *   const { colors, themeMode, setThemeMode, fontFamily, fontSize } = usePreferences();
+ *   return (
+ *     <View style={{ backgroundColor: colors.background }}>
+ *       <Text style={{ color: colors.text, fontSize: 17 * fontSize }}>
+ *         Current theme: {themeMode}
+ *       </Text>
+ *     </View>
+ *   );
+ * }
+ * ```
+ */
+export function usePreferences() {
+  const systemColorScheme = useColorScheme();
+  const store = usePreferencesStore();
+
+  // Compute current theme colors based on theme mode and system preference
+  const colors = getThemeColors(store.themeMode, systemColorScheme);
+
+  return {
+    // Theme
+    themeMode: store.themeMode,
+    setThemeMode: store.setThemeMode,
+    colors,
+
+    // Font
+    fontFamily: store.fontFamily,
+    fontSize: store.fontSize,
+    setFontFamily: store.setFontFamily,
+    setFontSize: store.setFontSize,
+
+    // Language
+    language: store.language,
+    setLanguage: store.setLanguage,
+  };
+}
+
+/**
+ * Backward-compatible hook for theme context
+ *
+ * @deprecated Use usePreferences() instead for access to all preferences
+ */
+export function useThemeContext() {
+  const { themeMode, setThemeMode, colors } = usePreferences();
+  return { themeMode, setThemeMode, colors };
+}
+
+/**
+ * Backward-compatible hook for font context
+ *
+ * @deprecated Use usePreferences() instead for access to all preferences
+ */
+export function useFontContext() {
+  const { fontFamily, fontSize, setFontFamily, setFontSize } = usePreferences();
+  return { fontFamily, fontSize, setFontFamily, setFontSize };
+}
+
+/**
+ * Backward-compatible hook for language context
+ *
+ * @deprecated Use usePreferences() instead for access to all preferences
+ */
+export function useLanguageContext() {
+  const { language, setLanguage } = usePreferences();
+  return { language, setLanguage };
+}
+
+/**
+ * Provider component for preferences
+ * With Zustand, this is optional but kept for consistency with legacy code
+ */
+export function PreferencesProvider({ children }: { children: React.ReactNode }) {
+  return <>{children}</>;
+}
+
+// Legacy provider aliases for backward compatibility
+export const ThemeProvider = PreferencesProvider;
+export const FontProvider = PreferencesProvider;
+export const LanguageProvider = PreferencesProvider;

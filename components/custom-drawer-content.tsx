@@ -8,7 +8,7 @@ import {
 import { useRouter } from 'expo-router';
 import { IconSymbol } from './ui/icon-symbol';
 import { Typography } from './ui/typography';
-import { useThemeContext } from '@/contexts/theme-context';
+import { useThemeContext } from '@/contexts/preferences-context';
 
 /**
  * Custom drawer content with pinned footer

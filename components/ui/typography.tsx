@@ -1,7 +1,7 @@
 import React, { type ReactNode } from 'react';
 import { Text, type TextProps, Platform } from 'react-native';
-import { useFontContext } from '@/contexts/font-context';
-import { useThemeContext } from '@/contexts/theme-context';
+import { useFontContext } from '@/contexts/preferences-context';
+import { useThemeContext } from '@/contexts/preferences-context';
 
 /**
  * iOS text style variants following Apple Human Interface Guidelines
@@ -47,7 +47,13 @@ export type TypographyVariant =
 interface TypographyProps extends Omit<TextProps, 'children'> {
   /** iOS text style variant (default: 'body') */
   variant?: TypographyVariant;
-  /** Font weight (default: 'regular') */
+  /**
+   * Font weight (default: 'regular')
+   * - regular: 400 (SF Pro Text Regular)
+   * - medium: 500 (SF Pro Text Medium) - Discord-style
+   * - semibold: 600 (SF Pro Text Semibold)
+   * - bold: 700 (SF Pro Text Bold)
+   */
   weight?: 'regular' | 'medium' | 'semibold' | 'bold';
   /** Text color using theme colors (default: 'label') */
   color?: 'label' | 'secondary' | 'tertiary' | 'quaternary';
@@ -96,8 +102,11 @@ const weightStyles: Record<string, string> = {
   bold: 'font-ios-bold',
 };
 
-// Map font families to actual font names
-const getFontFamilyName = (family: 'system' | 'serif' | 'mono'): string => {
+// Map font families to actual font names with weights
+const getFontFamilyName = (
+  family: 'system' | 'serif' | 'mono',
+  weight: 'regular' | 'medium' | 'semibold' | 'bold'
+): string => {
   if (Platform.OS !== 'ios') return 'System'; // Default for non-iOS
 
   switch (family) {
@@ -107,6 +116,7 @@ const getFontFamilyName = (family: 'system' | 'serif' | 'mono'): string => {
       return 'Menlo'; // iOS monospace font
     case 'system':
     default:
+      // SF Pro Text supports weights: 400 (Regular), 500 (Medium), 600 (Semibold), 700 (Bold)
       return 'System'; // SF Pro (default)
   }
 };
@@ -158,7 +168,7 @@ export function Typography({
     <Text
       className={`${variantClass} ${weightClass} ${className}`}
       style={[
-        { fontFamily: getFontFamilyName(fontFamily), color: textColor },
+        { fontFamily: getFontFamilyName(fontFamily, weight), color: textColor },
         fontSizeStyle,
         style,
       ]}

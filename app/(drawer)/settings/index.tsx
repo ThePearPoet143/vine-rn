@@ -1,44 +1,69 @@
 import React from 'react';
-import { ScrollView, View } from 'react-native';
+import { ScrollView } from 'react-native';
 import { useRouter } from 'expo-router';
-import { Card } from '@/components/ui/card';
-import { ListItem } from '@/components/ui/list-item';
-import { Typography } from '@/components/ui/typography';
-import { useThemeContext } from '@/contexts/theme-context';
+import { SettingsList } from '@/components/ui/settings-list';
+import { useThemeContext, useLanguageContext, LANGUAGE_LABELS } from '@/contexts/preferences-context';
 
 /**
  * Main Settings Screen
  *
- * Lists all setting categories following iOS Settings app pattern
- * Initial category: Appearance
+ * Discord-inspired settings layout with:
+ * - Section headers with proper hierarchy
+ * - Medium-weight typography
+ * - Generous spacing and padding
+ * - Automatic separators
  */
 export default function SettingsScreen() {
   const router = useRouter();
   const { colors } = useThemeContext();
+  const { language } = useLanguageContext();
 
   return (
     <ScrollView
       style={{ flex: 1, backgroundColor: colors.groupedBackground }}
-      contentContainerStyle={{ padding: 16 }}
+      contentContainerStyle={{ padding: 16, paddingBottom: 32 }}
     >
-      <View className="mb-ios-lg">
-        <Card variant="inset-grouped">
-          <ListItem
+      <SettingsList>
+        <SettingsList.Section title="USER SETTINGS" uppercase topMargin={16}>
+          <SettingsList.Item
             title="Appearance"
             subtitle="Theme, fonts, and display"
             icon="paintpalette.fill"
+            titleWeight="semibold"
             accessory="chevron"
             onPress={() => router.push('/(drawer)/settings/appearance')}
           />
-        </Card>
-      </View>
+          <SettingsList.Item
+            title="Language"
+            subtitle={LANGUAGE_LABELS[language].native}
+            value={language === 'en' ? 'English' : '简体中文'}
+            icon="globe"
+            titleWeight="semibold"
+            accessory="chevron"
+            onPress={() => router.push('/(drawer)/settings/language')}
+          />
+        </SettingsList.Section>
 
-      {/* Placeholder for future settings categories */}
-      <View className="mb-ios-lg">
-        <Typography variant="footnote" color="secondary" style={{ paddingHorizontal: 16 }}>
-          More settings coming soon
-        </Typography>
-      </View>
+        {/* Future sections */}
+        <SettingsList.Section title="APP SETTINGS" uppercase>
+          <SettingsList.Item
+            title="Notifications"
+            subtitle="Coming soon"
+            icon="bell.fill"
+            titleWeight="semibold"
+            accessory="none"
+            disabled
+          />
+          <SettingsList.Item
+            title="Privacy"
+            subtitle="Coming soon"
+            icon="lock.fill"
+            titleWeight="semibold"
+            accessory="none"
+            disabled
+          />
+        </SettingsList.Section>
+      </SettingsList>
     </ScrollView>
   );
 }

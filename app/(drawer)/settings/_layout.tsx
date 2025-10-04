@@ -1,6 +1,6 @@
 import { Stack } from 'expo-router';
 import React from 'react';
-import { useThemeContext } from '@/contexts/theme-context';
+import { useThemeContext } from '@/contexts/preferences-context';
 
 /**
  * Settings stack navigator
