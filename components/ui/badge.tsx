@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, Text, type ViewProps } from 'react-native';
+import { View, type ViewProps } from 'react-native';
+import { Typography } from './typography';
 
 export type BadgeColor = 'blue' | 'green' | 'red' | 'orange' | 'purple' | 'gray';
 
@@ -40,7 +41,9 @@ export function Badge({ color = 'blue', children, className = '', ...props }: Ba
 
   return (
     <View className={`${styles.container} px-ios-sm py-1 rounded-full ${className}`} {...props}>
-      <Text className={`${styles.text} text-ios-caption-1 font-ios-semibold`}>{children}</Text>
+      <Typography variant="caption-1" weight="semibold" className={styles.text}>
+        {children}
+      </Typography>
     </View>
   );
 }

@@ -1,6 +1,11 @@
 import React, { type ReactNode } from 'react';
-import { Text, type TextProps } from 'react-native';
+import { Text, type TextProps, Platform } from 'react-native';
+import { useFontContext } from '@/contexts/font-context';
 
+/**
+ * iOS text style variants following Apple Human Interface Guidelines
+ * @see https://developer.apple.com/design/human-interface-guidelines/typography
+ */
 export type TypographyVariant =
   | 'large-title'
   | 'title-1'
@@ -14,13 +19,39 @@ export type TypographyVariant =
   | 'caption-1'
   | 'caption-2';
 
+/**
+ * Typography component with full accessibility support
+ *
+ * Features:
+ * - iOS Dynamic Type support (82% - 310% via system settings)
+ * - App-level font size multiplier (50% - 200% via app slider)
+ * - Font family switching (System/Serif/Mono)
+ * - Automatic line height scaling to prevent text clipping
+ * - Flexible layouts that grow with text size
+ *
+ * @example
+ * ```tsx
+ * <Typography variant="body">Regular text</Typography>
+ * <Typography variant="headline" weight="bold">Bold headline</Typography>
+ * <Typography variant="caption-1" color="secondary">Secondary caption</Typography>
+ * ```
+ *
+ * Accessibility:
+ * - Always scales with iOS Dynamic Type unless `disableScaling={true}`
+ * - Combined scaling: app multiplier × iOS Dynamic Type (up to 620% total)
+ * - Use `disableScaling` ONLY for decorative text that shouldn't scale
+ */
 interface TypographyProps extends Omit<TextProps, 'children'> {
+  /** iOS text style variant (default: 'body') */
   variant?: TypographyVariant;
+  /** Font weight (default: 'regular') */
   weight?: 'regular' | 'medium' | 'semibold' | 'bold';
+  /** Text color using iOS semantic colors (default: 'label') */
   color?: 'label' | 'secondary' | 'tertiary' | 'quaternary';
   /**
    * Disable Dynamic Type scaling (use for decorative text only)
    * @default false
+   * @example Use for UI labels that must remain a fixed size regardless of accessibility settings
    */
   disableScaling?: boolean;
   children: ReactNode;
@@ -40,6 +71,21 @@ const variantStyles: Record<TypographyVariant, string> = {
   'caption-2': 'text-ios-caption-2',
 };
 
+// Base font sizes in pixels (matching iOS text styles)
+const variantBaseSizes: Record<TypographyVariant, number> = {
+  'large-title': 34,
+  'title-1': 28,
+  'title-2': 22,
+  'title-3': 20,
+  'headline': 17,
+  'body': 17,
+  'callout': 16,
+  'subheadline': 15,
+  'footnote': 13,
+  'caption-1': 12,
+  'caption-2': 11,
+};
+
 const weightStyles: Record<string, string> = {
   regular: 'font-ios-regular',
   medium: 'font-ios-medium',
@@ -54,6 +100,21 @@ const colorStyles: Record<string, string> = {
   quaternary: 'text-ios-quaternary-label dark:text-ios-quaternary-label-dark',
 };
 
+// Map font families to actual font names
+const getFontFamilyName = (family: 'system' | 'serif' | 'mono'): string => {
+  if (Platform.OS !== 'ios') return 'System'; // Default for non-iOS
+
+  switch (family) {
+    case 'serif':
+      return 'New York'; // iOS 13+ serif reading font
+    case 'mono':
+      return 'Menlo'; // iOS monospace font
+    case 'system':
+    default:
+      return 'System'; // SF Pro (default)
+  }
+};
+
 export function Typography({
   variant = 'body',
   weight = 'regular',
@@ -61,15 +122,27 @@ export function Typography({
   disableScaling = false,
   children,
   className = '',
+  style,
   ...props
 }: TypographyProps) {
+  const { fontFamily, fontSize: fontSizeMultiplier } = useFontContext();
   const variantClass = variantStyles[variant];
   const weightClass = weightStyles[weight];
   const colorClass = colorStyles[color];
 
+  // Apply font size multiplier using actual pixel values
+  // Only override Tailwind size if multiplier is not 1.0
+  const fontSizeStyle = fontSizeMultiplier !== 1.0
+    ? {
+        fontSize: Math.round(variantBaseSizes[variant] * fontSizeMultiplier),
+        lineHeight: Math.round(variantBaseSizes[variant] * fontSizeMultiplier * 1.2),
+      }
+    : {};
+
   return (
     <Text
       className={`${variantClass} ${weightClass} ${colorClass} ${className}`}
+      style={[{ fontFamily: getFontFamilyName(fontFamily) }, fontSizeStyle, style]}
       allowFontScaling={!disableScaling}
       maxFontSizeMultiplier={disableScaling ? 1 : 3}
       {...props}

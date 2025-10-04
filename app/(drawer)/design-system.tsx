@@ -1,13 +1,15 @@
 import React from 'react';
-import { View, ScrollView, useWindowDimensions } from 'react-native';
+import { View, ScrollView, useWindowDimensions, Pressable } from 'react-native';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Alert } from '@/components/ui/alert';
 import { Typography } from '@/components/ui/typography';
+import { useFontContext, type FontFamily } from '@/contexts/font-context';
 
 export default function DesignSystemScreen() {
   const { width } = useWindowDimensions();
+  const { fontFamily, setFontFamily, fontSize, setFontSize } = useFontContext();
 
   return (
     <ScrollView className="flex-1 bg-ios-grouped-bg dark:bg-ios-grouped-bg-dark">
@@ -21,6 +23,82 @@ export default function DesignSystemScreen() {
             Apple HIG-compliant components built with NativeWind v4
           </Typography>
         </View>
+
+        {/* Font Family Switcher */}
+        <Card variant="inset-grouped" className="mb-ios-md">
+          <Typography variant="title-3" weight="semibold" className="mb-ios-sm">
+            Font Family
+          </Typography>
+          <View className="flex-row gap-ios-xs mb-ios-lg">
+            {(['system', 'serif', 'mono'] as FontFamily[]).map((font) => (
+              <Pressable
+                key={font}
+                onPress={() => setFontFamily(font)}
+                className={`flex-1 py-ios-sm px-ios-md rounded-ios-md ${
+                  fontFamily === font
+                    ? 'bg-ios-blue dark:bg-ios-blue-dark'
+                    : 'bg-ios-fill dark:bg-ios-fill-dark'
+                }`}
+              >
+                <Typography
+                  variant="body"
+                  weight="medium"
+                  className={`text-center ${
+                    fontFamily === font
+                      ? 'text-white'
+                      : 'text-ios-label dark:text-ios-label-dark'
+                  }`}
+                >
+                  {font.charAt(0).toUpperCase() + font.slice(1)}
+                </Typography>
+              </Pressable>
+            ))}
+          </View>
+
+          {/* Font Size Slider */}
+          <Typography variant="title-3" weight="semibold" className="mb-ios-sm">
+            Font Size: {Math.round(fontSize * 100)}%
+          </Typography>
+          <View className="mb-ios-md">
+            <View className="flex-row items-center gap-ios-sm">
+              <Pressable
+                onPress={() => setFontSize(Math.max(0.5, fontSize - 0.1))}
+                className="min-w-[44px] min-h-[44px] aspect-square items-center justify-center bg-ios-fill dark:bg-ios-fill-dark rounded-full px-ios-xs"
+              >
+                <Typography variant="title-2" weight="semibold">−</Typography>
+              </Pressable>
+
+              <View className="flex-1 min-h-[44px] justify-center px-ios-sm">
+                <View className="h-[6px] bg-ios-fill dark:bg-ios-fill-dark rounded-full overflow-hidden">
+                  <View
+                    className="h-full bg-ios-blue dark:bg-ios-blue-dark rounded-full"
+                    style={{ width: `${((fontSize - 0.5) / 1.5) * 100}%` }}
+                  />
+                </View>
+              </View>
+
+              <Pressable
+                onPress={() => setFontSize(Math.min(2.0, fontSize + 0.1))}
+                className="min-w-[44px] min-h-[44px] aspect-square items-center justify-center bg-ios-fill dark:bg-ios-fill-dark rounded-full px-ios-xs"
+              >
+                <Typography variant="title-2" weight="semibold">+</Typography>
+              </Pressable>
+            </View>
+            <View className="flex-row justify-between mt-ios-xs px-ios-sm">
+              <Typography variant="caption-2" color="tertiary">50%</Typography>
+              <Typography variant="caption-2" color="tertiary">100%</Typography>
+              <Typography variant="caption-2" color="tertiary">200%</Typography>
+            </View>
+          </View>
+
+          <Typography variant="footnote" color="tertiary" className="mb-ios-md">
+            Font size works together with iOS Text Size settings for maximum flexibility.
+          </Typography>
+
+          <Typography variant="body" className="italic">
+            "In the beginning God created the heavens and the earth." — Genesis 1:1
+          </Typography>
+        </Card>
 
         {/* Device Info */}
         <Card variant="inset-grouped" className="mb-ios-md">
@@ -98,15 +176,15 @@ export default function DesignSystemScreen() {
                 Primary Colors
               </Typography>
               <View className="flex-row flex-wrap gap-ios-xs">
-                <View className="w-12 h-12 bg-ios-blue dark:bg-ios-blue-dark rounded-ios-sm" />
-                <View className="w-12 h-12 bg-ios-green dark:bg-ios-green-dark rounded-ios-sm" />
-                <View className="w-12 h-12 bg-ios-indigo dark:bg-ios-indigo-dark rounded-ios-sm" />
-                <View className="w-12 h-12 bg-ios-orange dark:bg-ios-orange-dark rounded-ios-sm" />
-                <View className="w-12 h-12 bg-ios-pink dark:bg-ios-pink-dark rounded-ios-sm" />
-                <View className="w-12 h-12 bg-ios-purple dark:bg-ios-purple-dark rounded-ios-sm" />
-                <View className="w-12 h-12 bg-ios-red dark:bg-ios-red-dark rounded-ios-sm" />
-                <View className="w-12 h-12 bg-ios-teal dark:bg-ios-teal-dark rounded-ios-sm" />
-                <View className="w-12 h-12 bg-ios-yellow dark:bg-ios-yellow-dark rounded-ios-sm" />
+                <View className="w-12 aspect-square bg-ios-blue dark:bg-ios-blue-dark rounded-ios-sm" />
+                <View className="w-12 aspect-square bg-ios-green dark:bg-ios-green-dark rounded-ios-sm" />
+                <View className="w-12 aspect-square bg-ios-indigo dark:bg-ios-indigo-dark rounded-ios-sm" />
+                <View className="w-12 aspect-square bg-ios-orange dark:bg-ios-orange-dark rounded-ios-sm" />
+                <View className="w-12 aspect-square bg-ios-pink dark:bg-ios-pink-dark rounded-ios-sm" />
+                <View className="w-12 aspect-square bg-ios-purple dark:bg-ios-purple-dark rounded-ios-sm" />
+                <View className="w-12 aspect-square bg-ios-red dark:bg-ios-red-dark rounded-ios-sm" />
+                <View className="w-12 aspect-square bg-ios-teal dark:bg-ios-teal-dark rounded-ios-sm" />
+                <View className="w-12 aspect-square bg-ios-yellow dark:bg-ios-yellow-dark rounded-ios-sm" />
               </View>
               <View className="flex-row flex-wrap gap-ios-xs mt-ios-xs">
                 <Typography variant="caption-2" color="tertiary">
@@ -144,12 +222,12 @@ export default function DesignSystemScreen() {
                 Gray Scale
               </Typography>
               <View className="flex-row flex-wrap gap-ios-xs">
-                <View className="w-12 h-12 bg-ios-gray dark:bg-ios-gray-dark rounded-ios-sm" />
-                <View className="w-12 h-12 bg-ios-gray-2 dark:bg-ios-gray-2-dark rounded-ios-sm" />
-                <View className="w-12 h-12 bg-ios-gray-3 dark:bg-ios-gray-3-dark rounded-ios-sm" />
-                <View className="w-12 h-12 bg-ios-gray-4 dark:bg-ios-gray-4-dark rounded-ios-sm" />
-                <View className="w-12 h-12 bg-ios-gray-5 dark:bg-ios-gray-5-dark rounded-ios-sm" />
-                <View className="w-12 h-12 bg-ios-gray-6 dark:bg-ios-gray-6-dark rounded-ios-sm" />
+                <View className="w-12 aspect-square bg-ios-gray dark:bg-ios-gray-dark rounded-ios-sm" />
+                <View className="w-12 aspect-square bg-ios-gray-2 dark:bg-ios-gray-2-dark rounded-ios-sm" />
+                <View className="w-12 aspect-square bg-ios-gray-3 dark:bg-ios-gray-3-dark rounded-ios-sm" />
+                <View className="w-12 aspect-square bg-ios-gray-4 dark:bg-ios-gray-4-dark rounded-ios-sm" />
+                <View className="w-12 aspect-square bg-ios-gray-5 dark:bg-ios-gray-5-dark rounded-ios-sm" />
+                <View className="w-12 aspect-square bg-ios-gray-6 dark:bg-ios-gray-6-dark rounded-ios-sm" />
               </View>
             </View>
           </Card>
@@ -280,31 +358,31 @@ export default function DesignSystemScreen() {
               Standard iOS spacing values
             </Typography>
             <View className="flex-row items-center gap-ios-sm">
-              <View className="w-ios-xs h-4 bg-ios-blue dark:bg-ios-blue-dark rounded-ios-sm" />
+              <View className="w-ios-xs min-h-[16px] bg-ios-blue dark:bg-ios-blue-dark rounded-ios-sm" />
               <Typography variant="caption-1" color="secondary">
                 xs (4px)
               </Typography>
             </View>
             <View className="flex-row items-center gap-ios-sm">
-              <View className="w-ios-sm h-4 bg-ios-blue dark:bg-ios-blue-dark rounded-ios-sm" />
+              <View className="w-ios-sm min-h-[16px] bg-ios-blue dark:bg-ios-blue-dark rounded-ios-sm" />
               <Typography variant="caption-1" color="secondary">
                 sm (8px)
               </Typography>
             </View>
             <View className="flex-row items-center gap-ios-sm">
-              <View className="w-ios-md h-4 bg-ios-blue dark:bg-ios-blue-dark rounded-ios-sm" />
+              <View className="w-ios-md min-h-[16px] bg-ios-blue dark:bg-ios-blue-dark rounded-ios-sm" />
               <Typography variant="caption-1" color="secondary">
                 md (16px - iPhone margins)
               </Typography>
             </View>
             <View className="flex-row items-center gap-ios-sm">
-              <View className="w-ios-lg h-4 bg-ios-blue dark:bg-ios-blue-dark rounded-ios-sm" />
+              <View className="w-ios-lg min-h-[16px] bg-ios-blue dark:bg-ios-blue-dark rounded-ios-sm" />
               <Typography variant="caption-1" color="secondary">
                 lg (24px - iPad margins)
               </Typography>
             </View>
             <View className="flex-row items-center gap-ios-sm">
-              <View className="w-ios-touch h-4 bg-ios-green dark:bg-ios-green-dark rounded-ios-sm" />
+              <View className="w-ios-touch min-h-[16px] bg-ios-green dark:bg-ios-green-dark rounded-ios-sm" />
               <Typography variant="caption-1" color="secondary">
                 touch (44px - minimum tap target)
               </Typography>
@@ -319,11 +397,11 @@ export default function DesignSystemScreen() {
           </Typography>
           <Card variant="inset-grouped">
             <View className="flex-row flex-wrap gap-ios-sm">
-              <View className="w-16 h-16 bg-ios-blue dark:bg-ios-blue-dark rounded-ios-sm" />
-              <View className="w-16 h-16 bg-ios-blue dark:bg-ios-blue-dark rounded-ios-md" />
-              <View className="w-16 h-16 bg-ios-blue dark:bg-ios-blue-dark rounded-ios-lg" />
-              <View className="w-16 h-16 bg-ios-blue dark:bg-ios-blue-dark rounded-ios-xl" />
-              <View className="w-16 h-16 bg-ios-blue dark:bg-ios-blue-dark rounded-full" />
+              <View className="w-16 aspect-square bg-ios-blue dark:bg-ios-blue-dark rounded-ios-sm" />
+              <View className="w-16 aspect-square bg-ios-blue dark:bg-ios-blue-dark rounded-ios-md" />
+              <View className="w-16 aspect-square bg-ios-blue dark:bg-ios-blue-dark rounded-ios-lg" />
+              <View className="w-16 aspect-square bg-ios-blue dark:bg-ios-blue-dark rounded-ios-xl" />
+              <View className="w-16 aspect-square bg-ios-blue dark:bg-ios-blue-dark rounded-full" />
             </View>
             <View className="flex-row flex-wrap gap-ios-sm mt-ios-xs">
               <Typography variant="caption-2" color="tertiary">
