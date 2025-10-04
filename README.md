@@ -1,29 +1,79 @@
-# Welcome to your Expo app 👋
+# Vine
 
 This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
 
-## Get started
+## Development Setup
 
-1. Install dependencies
+### Prerequisites
+
+- Node.js (v16.20.0 or later)
+- [EAS CLI](https://docs.expo.dev/eas-update/getting-started/#install-eas-cli) installed globally: `npm install -g eas-cli`
+- Expo account (sign up at [expo.dev](https://expo.dev))
+
+### Initial Setup
+
+1. **Install dependencies**
 
    ```bash
    npm install
    ```
 
-2. Start the app
+2. **Log in to Expo**
 
    ```bash
-   npx expo start
+   eas login
    ```
 
-In the output, you'll find options to open the app in a
+3. **Build the development client**
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+   For iOS (physical device):
+   ```bash
+   eas build --profile development --platform ios
+   ```
+
+   This will create a development build that you can install on your device via the link provided after the build completes.
+
+### Running the Development Server
+
+#### For Physical Devices (Recommended)
+
+Physical devices require tunneling to connect to your development server:
+
+```bash
+npx expo start --tunnel
+```
+
+This will:
+- Start the Metro bundler
+- Create an ngrok tunnel for remote access
+- Display a QR code
+
+**To connect your device:**
+1. Scan the QR code with your iPhone's camera
+2. Tap the notification to open in the development build app
+3. The app will connect to your development server
+
+#### For Simulators/Emulators
+
+If you're using the iOS Simulator or Android Emulator, you can start without tunneling:
+
+```bash
+npx expo start
+```
+
+Then press:
+- `i` - to open iOS simulator
+- `a` - to open Android emulator
+- `w` - to open web
+
+### Development Workflow
 
 You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+
+The app uses:
+- **Expo Router** for navigation
+- **React Native Reanimated** for animations
+- **Expo Dev Client** for custom development builds
 
 ## Get a fresh project
 
