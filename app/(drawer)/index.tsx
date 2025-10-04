@@ -24,7 +24,7 @@ export default function HomeScreen() {
       <ThemedView style={styles.stepContainer}>
         <ThemedText type="subtitle">Step 1: Try it</ThemedText>
         <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
+          Edit <ThemedText type="defaultSemiBold">app/(drawer)/index.tsx</ThemedText> to see changes.
           Press{' '}
           <ThemedText type="defaultSemiBold">
             {Platform.select({
@@ -61,7 +61,7 @@ export default function HomeScreen() {
         </Link>
 
         <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
+          {`Open the drawer menu to navigate to Explore and learn more about what's included in this starter app.`}
         </ThemedText>
       </ThemedView>
       <ThemedView style={styles.stepContainer}>
