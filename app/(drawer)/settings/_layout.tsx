@@ -16,7 +16,7 @@ export default function SettingsLayout() {
     <Stack
       screenOptions={{
         headerStyle: {
-          backgroundColor: colors.background,
+          backgroundColor: colors.groupedBackground,
         },
         headerTintColor: colors.text,
         headerShadowVisible: false,
@@ -32,6 +32,12 @@ export default function SettingsLayout() {
         name="appearance"
         options={{
           title: 'Appearance',
+        }}
+      />
+      <Stack.Screen
+        name="language"
+        options={{
+          title: 'Language',
         }}
       />
     </Stack>
