@@ -44,6 +44,16 @@ export default function DrawerLayout() {
           ),
         }}
       />
+      <Drawer.Screen
+        name="design-system"
+        options={{
+          drawerLabel: 'Design System',
+          title: 'Design System',
+          drawerIcon: ({ color, size }) => (
+            <IconSymbol size={size} name="paintpalette.fill" color={color} />
+          ),
+        }}
+      />
     </Drawer>
   );
 }

@@ -198,3 +198,94 @@ Closes VINE-123
 - Never commit `.env` files with real values
 - Document all environment variables
 - Use different values per environment (dev, qa, prod)
+
+## Build & Deployment
+
+### EAS Build Profiles
+
+The project uses 4 EAS build profiles defined in `eas.json`:
+
+**1. development**
+- Purpose: Local development with hot reload
+- Distribution: Internal (ad-hoc)
+- Command: `eas build --profile development --platform ios`
+- Use case: Daily development work with live reload and debugging
+
+**2. qa**
+- Purpose: QA testing environment
+- Distribution: Internal or TestFlight
+- Environment: `APP_ENV=qa`
+- Channel: `qa`
+- Command: `eas build --profile qa --platform ios`
+- Use case: Quality assurance testing before production release
+
+**3. preview**
+- Purpose: Stakeholder demos
+- Distribution: Internal (ad-hoc)
+- Command: `eas build --profile preview --platform ios`
+- Use case: Internal testing without development tools
+
+**4. production**
+- Purpose: App Store and TestFlight releases
+- Distribution: App Store
+- Auto-increment: Enabled for build numbers
+- Channel: `production`
+- Command: `eas build --profile production --platform ios`
+- Use case: Official releases to testers and end users
+
+### Build Configuration
+
+**Current Setup:**
+- Apple Team ID: `Y6R3HG9MDT` (configured for QA and production)
+- Build triggers: Manual only (no automatic CI/CD)
+- Build number: Auto-increments for production builds
+- Update channels: `qa` and `production` channels configured
+- EAS Project ID: `2c5cfaae-9ab2-4022-8c02-4576f7fb7b41`
+
+**When to Build:**
+- Development: First time setup, after adding native dependencies, after changing native config
+- QA: After merging features to qa branch, before production release
+- Production: After QA approval, ready for App Store submission
+
+### TestFlight Deployment Process
+
+**1. Build Production Version**
+```bash
+git checkout main
+git pull origin main
+eas build --profile production --platform ios
+```
+
+**2. Submit to TestFlight**
+```bash
+eas submit --platform ios
+```
+
+**3. Wait for Processing**
+- Apple processes the build (15-30 minutes)
+- Email notification when ready for testing
+- Build appears in App Store Connect
+
+**4. Tag the Release**
+```bash
+git tag -a v1.0.0 -m "Release version 1.0.0"
+git push origin v1.0.0
+```
+
+**Beta Tester Management:**
+- Internal testers: Up to 100 (App Store Connect users, no review required)
+- External testers: Up to 10,000 (requires beta app review, 1-2 days)
+
+### Future Automation
+
+**Not Currently Configured:**
+- GitHub Actions workflows for automatic builds
+- EAS Build webhooks
+- Automated TestFlight submissions
+
+**To Enable:**
+- Set up GitHub Actions workflow file
+- Configure EAS Build webhooks in project settings
+- Add automation triggers for branch merges
+
+For complete CI/CD documentation, see [ci-cd.md](ci-cd.md) and [tldr-ci-cd.md](tldr-ci-cd.md).
