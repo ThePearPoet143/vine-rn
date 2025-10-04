@@ -1,6 +1,7 @@
 import React, { type ReactNode } from 'react';
 import { Text, type TextProps, Platform } from 'react-native';
 import { useFontContext } from '@/contexts/font-context';
+import { useThemeContext } from '@/contexts/theme-context';
 
 /**
  * iOS text style variants following Apple Human Interface Guidelines
@@ -26,6 +27,7 @@ export type TypographyVariant =
  * - iOS Dynamic Type support (82% - 310% via system settings)
  * - App-level font size multiplier (50% - 200% via app slider)
  * - Font family switching (System/Serif/Mono)
+ * - Reading themes (Light/Dark/Sepia/Warm Dark/Green)
  * - Automatic line height scaling to prevent text clipping
  * - Flexible layouts that grow with text size
  *
@@ -39,6 +41,7 @@ export type TypographyVariant =
  * Accessibility:
  * - Always scales with iOS Dynamic Type unless `disableScaling={true}`
  * - Combined scaling: app multiplier × iOS Dynamic Type (up to 620% total)
+ * - All themes meet WCAG AAA contrast (7:1+)
  * - Use `disableScaling` ONLY for decorative text that shouldn't scale
  */
 interface TypographyProps extends Omit<TextProps, 'children'> {
@@ -46,7 +49,7 @@ interface TypographyProps extends Omit<TextProps, 'children'> {
   variant?: TypographyVariant;
   /** Font weight (default: 'regular') */
   weight?: 'regular' | 'medium' | 'semibold' | 'bold';
-  /** Text color using iOS semantic colors (default: 'label') */
+  /** Text color using theme colors (default: 'label') */
   color?: 'label' | 'secondary' | 'tertiary' | 'quaternary';
   /**
    * Disable Dynamic Type scaling (use for decorative text only)
@@ -93,13 +96,6 @@ const weightStyles: Record<string, string> = {
   bold: 'font-ios-bold',
 };
 
-const colorStyles: Record<string, string> = {
-  label: 'text-ios-label dark:text-ios-label-dark',
-  secondary: 'text-ios-secondary-label dark:text-ios-secondary-label-dark',
-  tertiary: 'text-ios-tertiary-label dark:text-ios-tertiary-label-dark',
-  quaternary: 'text-ios-quaternary-label dark:text-ios-quaternary-label-dark',
-};
-
 // Map font families to actual font names
 const getFontFamilyName = (family: 'system' | 'serif' | 'mono'): string => {
   if (Platform.OS !== 'ios') return 'System'; // Default for non-iOS
@@ -115,6 +111,22 @@ const getFontFamilyName = (family: 'system' | 'serif' | 'mono'): string => {
   }
 };
 
+// Get text color from theme based on color prop
+const getTextColor = (color: 'label' | 'secondary' | 'tertiary' | 'quaternary', theme: any): string => {
+  switch (color) {
+    case 'label':
+      return theme.text;
+    case 'secondary':
+      return theme.secondaryText;
+    case 'tertiary':
+      return theme.tertiaryText;
+    case 'quaternary':
+      return theme.tertiaryText; // Use tertiary as quaternary (close enough)
+    default:
+      return theme.text;
+  }
+};
+
 export function Typography({
   variant = 'body',
   weight = 'regular',
@@ -126,9 +138,9 @@ export function Typography({
   ...props
 }: TypographyProps) {
   const { fontFamily, fontSize: fontSizeMultiplier } = useFontContext();
+  const { colors } = useThemeContext();
   const variantClass = variantStyles[variant];
   const weightClass = weightStyles[weight];
-  const colorClass = colorStyles[color];
 
   // Apply font size multiplier using actual pixel values
   // Only override Tailwind size if multiplier is not 1.0
@@ -139,10 +151,17 @@ export function Typography({
       }
     : {};
 
+  // Get text color from current theme
+  const textColor = getTextColor(color, colors);
+
   return (
     <Text
-      className={`${variantClass} ${weightClass} ${colorClass} ${className}`}
-      style={[{ fontFamily: getFontFamilyName(fontFamily) }, fontSizeStyle, style]}
+      className={`${variantClass} ${weightClass} ${className}`}
+      style={[
+        { fontFamily: getFontFamilyName(fontFamily), color: textColor },
+        fontSizeStyle,
+        style,
+      ]}
       allowFontScaling={!disableScaling}
       maxFontSizeMultiplier={disableScaling ? 1 : 3}
       {...props}

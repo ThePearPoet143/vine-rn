@@ -1,5 +1,6 @@
 import React, { type ReactNode } from 'react';
 import { View, type ViewProps } from 'react-native';
+import { useThemeContext } from '@/contexts/theme-context';
 
 export type CardVariant = 'grouped' | 'inset-grouped' | 'plain';
 
@@ -8,17 +9,18 @@ interface CardProps extends ViewProps {
   children: ReactNode;
 }
 
-const variantStyles: Record<CardVariant, string> = {
-  grouped: 'bg-ios-secondary-grouped-bg dark:bg-ios-secondary-grouped-bg-dark',
-  'inset-grouped': 'bg-ios-secondary-grouped-bg dark:bg-ios-secondary-grouped-bg-dark',
-  plain: 'bg-ios-bg dark:bg-ios-bg-dark',
-};
+export function Card({ variant = 'grouped', children, className = '', style, ...props }: CardProps) {
+  const { colors } = useThemeContext();
 
-export function Card({ variant = 'grouped', children, className = '', ...props }: CardProps) {
-  const variantClass = variantStyles[variant];
+  // Use theme colors for card backgrounds
+  const backgroundColor = variant === 'plain' ? colors.background : colors.cardBackground;
 
   return (
-    <View className={`rounded-ios-md p-ios-md ${variantClass} ${className}`} {...props}>
+    <View
+      className={`rounded-ios-md p-ios-md ${className}`}
+      style={[{ backgroundColor }, style]}
+      {...props}
+    >
       {children}
     </View>
   );

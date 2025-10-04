@@ -6,13 +6,16 @@ import { Badge } from '@/components/ui/badge';
 import { Alert } from '@/components/ui/alert';
 import { Typography } from '@/components/ui/typography';
 import { useFontContext, type FontFamily } from '@/contexts/font-context';
+import { useThemeContext } from '@/contexts/theme-context';
+import { type ThemeMode, Themes } from '@/constants/themes';
 
 export default function DesignSystemScreen() {
   const { width } = useWindowDimensions();
   const { fontFamily, setFontFamily, fontSize, setFontSize } = useFontContext();
+  const { themeMode, setThemeMode, colors } = useThemeContext();
 
   return (
-    <ScrollView className="flex-1 bg-ios-grouped-bg dark:bg-ios-grouped-bg-dark">
+    <ScrollView style={{ flex: 1 }}>
       <View className="p-ios-md">
         {/* Header */}
         <View className="mb-ios-lg">
@@ -20,12 +23,85 @@ export default function DesignSystemScreen() {
             Design System
           </Typography>
           <Typography variant="body" color="secondary">
-            Apple HIG-compliant components built with NativeWind v4
+            Reading experience with accessibility-first design
+          </Typography>
+        </View>
+
+        {/* Reading Theme Picker */}
+        <View style={{ backgroundColor: colors.cardBackground }} className="p-ios-md rounded-ios-lg mb-ios-md">
+          <Typography variant="title-3" weight="semibold" className="mb-ios-sm">
+            Reading Theme
+          </Typography>
+          <View className="gap-ios-xs mb-ios-md">
+            {(['auto', 'light', 'dark', 'sepia', 'warm-dark', 'green'] as ThemeMode[]).map((mode) => {
+              const isActive = themeMode === mode;
+              const themeColors = mode === 'auto' ? colors : Themes[mode as Exclude<ThemeMode, 'auto'>];
+
+              return (
+                <Pressable
+                  key={mode}
+                  onPress={() => setThemeMode(mode)}
+                  style={{
+                    backgroundColor: isActive ? colors.text : colors.secondaryBackground,
+                    borderWidth: 2,
+                    borderColor: isActive ? colors.text : colors.border,
+                  }}
+                  className="p-ios-md rounded-ios-md flex-row items-center justify-between"
+                >
+                  <View className="flex-row items-center gap-ios-sm flex-1">
+                    {/* Theme color preview swatch */}
+                    {mode !== 'auto' && (
+                      <View
+                        style={{ backgroundColor: themeColors.background }}
+                        className="w-[40px] h-[40px] rounded-ios-sm"
+                      >
+                        <View className="flex-1 items-center justify-center">
+                          <Typography
+                            variant="caption-1"
+                            weight="semibold"
+                            style={{ color: themeColors.text }}
+                          >
+                            Aa
+                          </Typography>
+                        </View>
+                      </View>
+                    )}
+                    <View className="flex-1">
+                      <Typography
+                        variant="body"
+                        weight={isActive ? 'semibold' : 'medium'}
+                        style={{ color: isActive ? colors.background : colors.text }}
+                      >
+                        {mode === 'auto' ? 'Auto (System)' :
+                         mode === 'warm-dark' ? 'Warm Dark' :
+                         mode.charAt(0).toUpperCase() + mode.slice(1)}
+                      </Typography>
+                      {mode !== 'auto' && (
+                        <Typography
+                          variant="caption-1"
+                          style={{ color: isActive ? colors.background : colors.secondaryText }}
+                        >
+                          {themeColors.description} • {themeColors.contrastRatio}
+                        </Typography>
+                      )}
+                    </View>
+                  </View>
+                  {isActive && (
+                    <Typography variant="headline" style={{ color: colors.background }}>
+                      ✓
+                    </Typography>
+                  )}
+                </Pressable>
+              );
+            })}
+          </View>
+          <Typography variant="footnote" color="tertiary">
+            All themes meet WCAG AAA standards (7:1+ contrast) for comfortable extended reading.
           </Typography>
         </View>
 
         {/* Font Family Switcher */}
-        <Card variant="inset-grouped" className="mb-ios-md">
+        <View style={{ backgroundColor: colors.cardBackground }} className="p-ios-md rounded-ios-lg mb-ios-md">
           <Typography variant="title-3" weight="semibold" className="mb-ios-sm">
             Font Family
           </Typography>
@@ -34,20 +110,16 @@ export default function DesignSystemScreen() {
               <Pressable
                 key={font}
                 onPress={() => setFontFamily(font)}
-                className={`flex-1 py-ios-sm px-ios-md rounded-ios-md ${
-                  fontFamily === font
-                    ? 'bg-ios-blue dark:bg-ios-blue-dark'
-                    : 'bg-ios-fill dark:bg-ios-fill-dark'
-                }`}
+                style={{
+                  backgroundColor: fontFamily === font ? '#007AFF' : colors.secondaryBackground,
+                }}
+                className="flex-1 py-ios-sm px-ios-md rounded-ios-md"
               >
                 <Typography
                   variant="body"
                   weight="medium"
-                  className={`text-center ${
-                    fontFamily === font
-                      ? 'text-white'
-                      : 'text-ios-label dark:text-ios-label-dark'
-                  }`}
+                  style={{ color: fontFamily === font ? '#FFFFFF' : colors.text }}
+                  className="text-center"
                 >
                   {font.charAt(0).toUpperCase() + font.slice(1)}
                 </Typography>
@@ -63,23 +135,25 @@ export default function DesignSystemScreen() {
             <View className="flex-row items-center gap-ios-sm">
               <Pressable
                 onPress={() => setFontSize(Math.max(0.5, fontSize - 0.1))}
-                className="min-w-[44px] min-h-[44px] aspect-square items-center justify-center bg-ios-fill dark:bg-ios-fill-dark rounded-full px-ios-xs"
+                style={{ backgroundColor: colors.secondaryBackground }}
+                className="min-w-[44px] min-h-[44px] aspect-square items-center justify-center rounded-full px-ios-xs"
               >
                 <Typography variant="title-2" weight="semibold">−</Typography>
               </Pressable>
 
               <View className="flex-1 min-h-[44px] justify-center px-ios-sm">
-                <View className="h-[6px] bg-ios-fill dark:bg-ios-fill-dark rounded-full overflow-hidden">
+                <View style={{ backgroundColor: colors.secondaryBackground }} className="h-[6px] rounded-full overflow-hidden">
                   <View
-                    className="h-full bg-ios-blue dark:bg-ios-blue-dark rounded-full"
-                    style={{ width: `${((fontSize - 0.5) / 1.5) * 100}%` }}
+                    style={{ backgroundColor: '#007AFF', width: `${((fontSize - 0.5) / 1.5) * 100}%` }}
+                    className="h-full rounded-full"
                   />
                 </View>
               </View>
 
               <Pressable
                 onPress={() => setFontSize(Math.min(2.0, fontSize + 0.1))}
-                className="min-w-[44px] min-h-[44px] aspect-square items-center justify-center bg-ios-fill dark:bg-ios-fill-dark rounded-full px-ios-xs"
+                style={{ backgroundColor: colors.secondaryBackground }}
+                className="min-w-[44px] min-h-[44px] aspect-square items-center justify-center rounded-full px-ios-xs"
               >
                 <Typography variant="title-2" weight="semibold">+</Typography>
               </Pressable>
@@ -95,10 +169,12 @@ export default function DesignSystemScreen() {
             Font size works together with iOS Text Size settings for maximum flexibility.
           </Typography>
 
-          <Typography variant="body" className="italic">
-            "In the beginning God created the heavens and the earth." — Genesis 1:1
-          </Typography>
-        </Card>
+          <View style={{ backgroundColor: colors.secondaryBackground }} className="p-ios-md rounded-ios-md">
+            <Typography variant="body" className="italic text-center">
+              "In the beginning God created the heavens and the earth." — Genesis 1:1
+            </Typography>
+          </View>
+        </View>
 
         {/* Device Info */}
         <Card variant="inset-grouped" className="mb-ios-md">
@@ -175,16 +251,16 @@ export default function DesignSystemScreen() {
               <Typography variant="headline" weight="semibold" className="mb-ios-xs">
                 Primary Colors
               </Typography>
-              <View className="flex-row flex-wrap gap-ios-xs">
-                <View className="w-12 aspect-square bg-ios-blue dark:bg-ios-blue-dark rounded-ios-sm" />
-                <View className="w-12 aspect-square bg-ios-green dark:bg-ios-green-dark rounded-ios-sm" />
-                <View className="w-12 aspect-square bg-ios-indigo dark:bg-ios-indigo-dark rounded-ios-sm" />
-                <View className="w-12 aspect-square bg-ios-orange dark:bg-ios-orange-dark rounded-ios-sm" />
-                <View className="w-12 aspect-square bg-ios-pink dark:bg-ios-pink-dark rounded-ios-sm" />
-                <View className="w-12 aspect-square bg-ios-purple dark:bg-ios-purple-dark rounded-ios-sm" />
-                <View className="w-12 aspect-square bg-ios-red dark:bg-ios-red-dark rounded-ios-sm" />
-                <View className="w-12 aspect-square bg-ios-teal dark:bg-ios-teal-dark rounded-ios-sm" />
-                <View className="w-12 aspect-square bg-ios-yellow dark:bg-ios-yellow-dark rounded-ios-sm" />
+              <View className="flex-row flex-wrap gap-ios-sm">
+                <View style={{ backgroundColor: colors.isDark ? '#0A84FF' : '#007AFF', width: 60, height: 60, borderWidth: 1, borderColor: colors.border, borderRadius: 8 }} />
+                <View style={{ backgroundColor: colors.isDark ? '#30D158' : '#34C759', width: 60, height: 60, borderWidth: 1, borderColor: colors.border, borderRadius: 8 }} />
+                <View style={{ backgroundColor: colors.isDark ? '#5E5CE6' : '#5856D6', width: 60, height: 60, borderWidth: 1, borderColor: colors.border, borderRadius: 8 }} />
+                <View style={{ backgroundColor: colors.isDark ? '#FF9F0A' : '#FF9500', width: 60, height: 60, borderWidth: 1, borderColor: colors.border, borderRadius: 8 }} />
+                <View style={{ backgroundColor: colors.isDark ? '#FF375F' : '#FF2D55', width: 60, height: 60, borderWidth: 1, borderColor: colors.border, borderRadius: 8 }} />
+                <View style={{ backgroundColor: colors.isDark ? '#BF5AF2' : '#AF52DE', width: 60, height: 60, borderWidth: 1, borderColor: colors.border, borderRadius: 8 }} />
+                <View style={{ backgroundColor: colors.isDark ? '#FF453A' : '#FF3B30', width: 60, height: 60, borderWidth: 1, borderColor: colors.border, borderRadius: 8 }} />
+                <View style={{ backgroundColor: colors.isDark ? '#64D2FF' : '#5AC8FA', width: 60, height: 60, borderWidth: 1, borderColor: colors.border, borderRadius: 8 }} />
+                <View style={{ backgroundColor: colors.isDark ? '#FFD60A' : '#FFCC00', width: 60, height: 60, borderWidth: 1, borderColor: colors.border, borderRadius: 8 }} />
               </View>
               <View className="flex-row flex-wrap gap-ios-xs mt-ios-xs">
                 <Typography variant="caption-2" color="tertiary">
@@ -221,13 +297,13 @@ export default function DesignSystemScreen() {
               <Typography variant="headline" weight="semibold" className="mb-ios-xs">
                 Gray Scale
               </Typography>
-              <View className="flex-row flex-wrap gap-ios-xs">
-                <View className="w-12 aspect-square bg-ios-gray dark:bg-ios-gray-dark rounded-ios-sm" />
-                <View className="w-12 aspect-square bg-ios-gray-2 dark:bg-ios-gray-2-dark rounded-ios-sm" />
-                <View className="w-12 aspect-square bg-ios-gray-3 dark:bg-ios-gray-3-dark rounded-ios-sm" />
-                <View className="w-12 aspect-square bg-ios-gray-4 dark:bg-ios-gray-4-dark rounded-ios-sm" />
-                <View className="w-12 aspect-square bg-ios-gray-5 dark:bg-ios-gray-5-dark rounded-ios-sm" />
-                <View className="w-12 aspect-square bg-ios-gray-6 dark:bg-ios-gray-6-dark rounded-ios-sm" />
+              <View className="flex-row flex-wrap gap-ios-sm">
+                <View style={{ backgroundColor: colors.isDark ? '#8E8E93' : '#8E8E93', width: 60, height: 60, borderWidth: 1, borderColor: colors.border, borderRadius: 8 }} />
+                <View style={{ backgroundColor: colors.isDark ? '#636366' : '#AEAEB2', width: 60, height: 60, borderWidth: 1, borderColor: colors.border, borderRadius: 8 }} />
+                <View style={{ backgroundColor: colors.isDark ? '#48484A' : '#C7C7CC', width: 60, height: 60, borderWidth: 1, borderColor: colors.border, borderRadius: 8 }} />
+                <View style={{ backgroundColor: colors.isDark ? '#3A3A3C' : '#D1D1D6', width: 60, height: 60, borderWidth: 1, borderColor: colors.border, borderRadius: 8 }} />
+                <View style={{ backgroundColor: colors.isDark ? '#2C2C2E' : '#E5E5EA', width: 60, height: 60, borderWidth: 1, borderColor: colors.border, borderRadius: 8 }} />
+                <View style={{ backgroundColor: colors.isDark ? '#1C1C1E' : '#F2F2F7', width: 60, height: 60, borderWidth: 1, borderColor: colors.border, borderRadius: 8 }} />
               </View>
             </View>
           </Card>
