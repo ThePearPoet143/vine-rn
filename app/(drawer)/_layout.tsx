@@ -34,6 +34,16 @@ export default function DrawerLayout() {
           ),
         }}
       />
+      <Drawer.Screen
+        name="nativewind-test"
+        options={{
+          drawerLabel: 'NativeWind Test',
+          title: 'NativeWind Test',
+          drawerIcon: ({ color, size }) => (
+            <IconSymbol size={size} name="paintbrush.fill" color={color} />
+          ),
+        }}
+      />
     </Drawer>
   );
 }
