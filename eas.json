@@ -26,9 +26,13 @@
   "submit": {
     "qa": {
       "ios": {
-        "appleTeamId": "your-apple-team-id"
+        "appleTeamId": "Y6R3HG9MDT"
       }
     },
-    "production": {}
+    "production": {
+      "ios": {
+        "appleTeamId": "Y6R3HG9MDT"
+      }
+    }
   }
 }
