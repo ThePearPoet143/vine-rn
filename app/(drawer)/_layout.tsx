@@ -2,6 +2,7 @@ import { Drawer } from 'expo-router/drawer';
 import React from 'react';
 
 import { IconSymbol } from '@/components/ui/icon-symbol';
+import { CustomDrawerContent } from '@/components/custom-drawer-content';
 import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 
@@ -10,6 +11,7 @@ export default function DrawerLayout() {
 
   return (
     <Drawer
+      drawerContent={(props) => <CustomDrawerContent {...props} />}
       screenOptions={{
         drawerActiveTintColor: Colors[colorScheme ?? 'light'].tint,
         headerShown: true,
@@ -52,6 +54,13 @@ export default function DrawerLayout() {
           drawerIcon: ({ color, size }) => (
             <IconSymbol size={size} name="paintpalette.fill" color={color} />
           ),
+        }}
+      />
+      <Drawer.Screen
+        name="settings"
+        options={{
+          drawerItemStyle: { display: 'none' },
+          headerShown: false,
         }}
       />
     </Drawer>
