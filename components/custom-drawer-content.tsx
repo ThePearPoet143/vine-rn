@@ -31,7 +31,7 @@ export function CustomDrawerContent(props: DrawerContentComponentProps) {
   const insets = useSafeAreaInsets();
 
   return (
-    <View style={[styles.container, { backgroundColor: colors.isDark ? colors.background : '#F8F8F8' }]}>
+    <View style={[styles.container, { backgroundColor: colors.groupedBackground }]}>
       {/* Header */}
       <View style={styles.header}>
         <Typography
@@ -63,7 +63,7 @@ export function CustomDrawerContent(props: DrawerContentComponentProps) {
         style={[
           styles.footer,
           {
-            backgroundColor: colors.isDark ? colors.background : '#F8F8F8',
+            backgroundColor: colors.groupedBackground,
             paddingBottom: Math.max(insets.bottom, 12),
           },
         ]}

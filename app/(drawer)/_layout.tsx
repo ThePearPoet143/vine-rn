@@ -26,23 +26,24 @@ export default function DrawerLayout() {
           borderRightWidth: 1,
           borderRightColor: colors.isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)',
         },
-        overlayColor: 'rgba(255, 255, 255, 0.5)',
+        overlayColor: colors.isDark ? 'transparent' : 'rgba(0, 0, 0, 0.3)',
         drawerActiveTintColor: colors.text,
         drawerActiveBackgroundColor: colors.isDark
-          ? 'rgba(255, 255, 255, 0.08)'
+          ? 'rgba(255, 255, 255, 0.1)'
           : 'rgba(0, 0, 0, 0.05)',
-        drawerInactiveTintColor: colors.secondaryText,
+        drawerInactiveTintColor: colors.text,
         drawerLabelStyle: {
-          marginLeft: 12,
-          fontWeight: '600',
-          fontSize: 16,
+          marginLeft: 16,
+          fontWeight: '500',
+          fontSize: 17,
         },
         drawerItemStyle: {
-          borderRadius: 8,
-          paddingLeft: 12,
-          paddingRight: 12,
+          borderRadius: 0,
+          paddingLeft: 16,
+          paddingRight: 16,
           marginHorizontal: 0,
-          marginVertical: 2,
+          marginVertical: 0,
+          minHeight: 56,
         },
         drawerIconStyle: {
           marginLeft: 0,
@@ -63,8 +64,8 @@ export default function DrawerLayout() {
         options={{
           drawerLabel: 'Home',
           title: 'Vine',
-          drawerIcon: ({ color, size }) => (
-            <IconSymbol size={size} name="book.fill" color={color} />
+          drawerIcon: ({ color }) => (
+            <IconSymbol size={28} name="book.fill" color={color} />
           ),
         }}
       />
@@ -73,8 +74,8 @@ export default function DrawerLayout() {
         options={{
           drawerLabel: 'Design System',
           title: 'Design System',
-          drawerIcon: ({ color, size }) => (
-            <IconSymbol size={size} name="paintpalette.fill" color={color} />
+          drawerIcon: ({ color }) => (
+            <IconSymbol size={28} name="paintpalette.fill" color={color} />
           ),
         }}
       />
@@ -84,8 +85,8 @@ export default function DrawerLayout() {
           drawerLabel: 'Settings',
           title: 'Settings',
           headerShown: false,
-          drawerIcon: ({ color, size }) => (
-            <IconSymbol size={size} name="gearshape.fill" color={color} />
+          drawerIcon: ({ color }) => (
+            <IconSymbol size={28} name="gearshape.fill" color={color} />
           ),
         }}
       />

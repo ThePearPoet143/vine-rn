@@ -26,6 +26,8 @@ const translations = {
     auto: 'Auto (System)',
     light: 'Light',
     dark: 'Dark',
+    parchment: 'Parchment',
+    night: 'Night',
     sepia: 'Sepia',
     warmDark: 'Warm Dark',
     green: 'Green',
@@ -118,6 +120,8 @@ const translations = {
     auto: '自动（跟随系统）',
     light: '明亮',
     dark: '深色',
+    parchment: '羊皮纸',
+    night: '夜间',
     sepia: '棕褐',
     warmDark: '暖色深色',
     green: '绿色',
@@ -271,12 +275,14 @@ export default function DesignSystemScreen() {
           <SectionHeader title={t.readingTheme} uppercase={false} bottomMargin={8} />
           <SettingsList>
             <SettingsList.Section>
-              {(['auto', 'light', 'dark', 'sepia', 'warm-dark', 'green'] as ThemeMode[]).map((mode, index, arr) => {
+              {(['auto', 'light', 'dark', 'parchment', 'night', 'sepia', 'warm-dark', 'green'] as ThemeMode[]).map((mode, index, arr) => {
                 const themeColors = mode === 'auto' ? colors : Themes[mode as Exclude<ThemeMode, 'auto'>];
                 const themeLabel = mode === 'auto' ? t.auto :
                                  mode === 'light' ? t.light :
                                  mode === 'dark' ? t.dark :
+                                 mode === 'parchment' ? t.parchment :
                                  mode === 'sepia' ? t.sepia :
+                                 mode === 'night' ? t.night :
                                  mode === 'warm-dark' ? t.warmDark :
                                  t.green;
 

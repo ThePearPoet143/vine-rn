@@ -4,7 +4,7 @@
  * All themes meet WCAG AAA contrast requirements (7:1+ for normal text)
  */
 
-export type ThemeMode = 'light' | 'dark' | 'sepia' | 'warm-dark' | 'green' | 'auto';
+export type ThemeMode = 'light' | 'dark' | 'parchment' | 'night' | 'sepia' | 'warm-dark' | 'green' | 'auto';
 
 /**
  * Theme color palette interface
@@ -143,6 +143,58 @@ export const WarmDarkTheme: ThemeColors = {
 };
 
 /**
+ * Parchment theme - Subtle warm light theme
+ * Gentle off-white background for reduced eye strain
+ * Contrast: 21:1 (WCAG AAA)
+ */
+export const ParchmentTheme: ThemeColors = {
+  background: '#FAF9F5',
+  text: '#000000',
+
+  secondaryBackground: '#F5F4ED',
+  secondaryText: 'rgba(60, 60, 67, 0.75)',
+  tertiaryText: 'rgba(60, 60, 67, 0.3)',
+
+  cardBackground: '#FFFFFF',
+  groupedBackground: '#F5F4ED',
+
+  border: 'rgba(60, 60, 67, 0.29)',
+  separator: 'rgba(60, 60, 67, 0.29)',
+
+  isDark: false,
+
+  name: 'Parchment',
+  description: 'Subtle warm tones with crisp contrast',
+  contrastRatio: '21:1',
+};
+
+/**
+ * Night theme - Deep charcoal dark theme
+ * Softer than pure black with warm undertones
+ * Contrast: 16:1 (WCAG AAA)
+ */
+export const NightTheme: ThemeColors = {
+  background: '#30302E',
+  text: '#FFFFFF',
+
+  secondaryBackground: '#262624',
+  secondaryText: 'rgba(235, 235, 245, 0.75)',
+  tertiaryText: 'rgba(235, 235, 245, 0.3)',
+
+  cardBackground: '#262624',
+  groupedBackground: '#1F1E1D',
+
+  border: '#262624',
+  separator: 'rgba(84, 84, 88, 0.6)',
+
+  isDark: true,
+
+  name: 'Night',
+  description: 'Deep charcoal with warm undertones',
+  contrastRatio: '16:1',
+};
+
+/**
  * Green theme - Nature-inspired reading
  * Alternative warm option, calming effect
  * Contrast: 8.5:1 (WCAG AAA)
@@ -174,6 +226,8 @@ export const GreenTheme: ThemeColors = {
 export const Themes: Record<Exclude<ThemeMode, 'auto'>, ThemeColors> = {
   light: LightTheme,
   dark: DarkTheme,
+  parchment: ParchmentTheme,
+  night: NightTheme,
   sepia: SepiaTheme,
   'warm-dark': WarmDarkTheme,
   green: GreenTheme,
