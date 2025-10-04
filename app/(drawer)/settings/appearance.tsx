@@ -8,7 +8,7 @@ import { Typography } from '@/components/ui/typography';
 import { Switch } from '@/components/ui/switch';
 import { Divider } from '@/components/ui/divider';
 import { useThemeContext, useFontContext } from '@/contexts/preferences-context';
-import { THEME_OPTIONS, FONT_OPTIONS } from '@/constants/appearance';
+import { AUTO_THEME, LIGHT_THEMES, DARK_THEMES, FONT_OPTIONS } from '@/constants/appearance';
 import { getAccentBlue } from '@/constants/colors';
 
 /**
@@ -37,9 +37,37 @@ export default function AppearanceScreen() {
       contentContainerStyle={{ padding: 16, paddingBottom: 32 }}
     >
       <SettingsList>
-        {/* Reading Theme Section */}
+        {/* Auto Theme Section */}
         <SettingsList.Section title="READING THEME" uppercase topMargin={16}>
-          {THEME_OPTIONS.map((theme) => (
+          <SettingsList.Item
+            key={AUTO_THEME.mode}
+            title={AUTO_THEME.label}
+            icon={AUTO_THEME.icon}
+            titleWeight="semibold"
+            accessory="radio"
+            selected={themeMode === AUTO_THEME.mode}
+            onPress={() => setThemeMode(AUTO_THEME.mode)}
+          />
+        </SettingsList.Section>
+
+        {/* Light Themes Section */}
+        <SettingsList.Section title="LIGHT MODE" uppercase>
+          {LIGHT_THEMES.map((theme) => (
+            <SettingsList.Item
+              key={theme.mode}
+              title={theme.label}
+              icon={theme.icon}
+              titleWeight="semibold"
+              accessory="radio"
+              selected={themeMode === theme.mode}
+              onPress={() => setThemeMode(theme.mode)}
+            />
+          ))}
+        </SettingsList.Section>
+
+        {/* Dark Themes Section */}
+        <SettingsList.Section title="DARK MODE" uppercase>
+          {DARK_THEMES.map((theme) => (
             <SettingsList.Item
               key={theme.mode}
               title={theme.label}

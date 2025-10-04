@@ -50,7 +50,7 @@ export const Switch: FC<SwitchProps> = ({ value = false, onValueChange }) => {
   const { colors } = useThemeContext();
 
   // Theme-aware colors
-  const TRACK_INACTIVE = colors.isDark ? '#4E505B' : '#E5E5EA';
+  const TRACK_INACTIVE = colors.switchTrackInactive;
   const TRACK_ACTIVE = getAccentBlue(colors.isDark);
 
   // Thumb position: 0 (left/off) to SWITCH_MAX_OFFSET (right/on)

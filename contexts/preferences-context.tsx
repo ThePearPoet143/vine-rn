@@ -1,5 +1,7 @@
 import React from 'react';
 import { create } from 'zustand';
+import { persist, createJSONStorage } from 'zustand/middleware';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useColorScheme } from 'react-native';
 import { getThemeColors, type ThemeColors } from '@/constants/themes';
 import { createThemeSlice, type ThemeSlice } from './slices/theme-slice';
@@ -23,28 +25,43 @@ export { LANGUAGE_LABELS } from './slices/language-slice';
  * - Single source of truth for all preferences
  * - Atomic updates (all preferences load/save together)
  * - Better performance (single subscription vs 3 nested contexts)
- * - Easy to add persistence with zustand middleware
+ * - Persistent across app restarts (AsyncStorage)
+ * - Cross-platform (iOS, Android, Web via localStorage)
  */
 type PreferencesStore = ThemeSlice & FontSlice & LanguageSlice;
 
-export const usePreferencesStore = create<PreferencesStore>()((...a) => ({
-  ...createThemeSlice(...a),
-  ...createFontSlice(...a),
-  ...createLanguageSlice(...a),
-}));
+export const usePreferencesStore = create<PreferencesStore>()(
+  persist(
+    (...a) => ({
+      ...createThemeSlice(...a),
+      ...createFontSlice(...a),
+      ...createLanguageSlice(...a),
+    }),
+    {
+      name: 'user-preferences',
+      storage: createJSONStorage(() => AsyncStorage),
+    }
+  )
+);
 
 /**
  * Hook to access all preferences with computed values
  *
  * Adds computed theme colors based on theme mode and system preference
+ * Includes hydration status to prevent flash of unstyled content
  *
  * @example
  * ```tsx
  * function MyComponent() {
- *   const { colors, themeMode, setThemeMode, fontFamily, fontSize } = usePreferences();
+ *   const { colors, themeMode, setThemeMode, hasHydrated } = usePreferences();
+ *
+ *   if (!hasHydrated) {
+ *     return <LoadingScreen />; // Optional: show loading until hydrated
+ *   }
+ *
  *   return (
  *     <View style={{ backgroundColor: colors.background }}>
- *       <Text style={{ color: colors.text, fontSize: 17 * fontSize }}>
+ *       <Text style={{ color: colors.text }}>
  *         Current theme: {themeMode}
  *       </Text>
  *     </View>
@@ -56,10 +73,16 @@ export function usePreferences() {
   const systemColorScheme = useColorScheme();
   const store = usePreferencesStore();
 
+  // Check if store has been hydrated from AsyncStorage
+  const hasHydrated = usePreferencesStore.persist.hasHydrated();
+
   // Compute current theme colors based on theme mode and system preference
   const colors = getThemeColors(store.themeMode, systemColorScheme);
 
   return {
+    // Hydration status (useful for preventing flash of unstyled content)
+    hasHydrated,
+
     // Theme
     themeMode: store.themeMode,
     setThemeMode: store.setThemeMode,

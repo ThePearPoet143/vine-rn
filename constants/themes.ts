@@ -28,6 +28,17 @@ export interface ThemeColors {
   border: string;
   separator: string;
 
+  // Interaction overlays (eliminates isDark conditionals)
+  pressOverlay: string;        // Press feedback overlay
+  hoverOverlay: string;        // Hover state overlay
+
+  // Navigation colors
+  drawerBorder: string;        // Drawer right border
+  drawerOverlay: string;       // Drawer scrim overlay
+
+  // Switch colors
+  switchTrackInactive: string; // Switch track when off
+
   // Status
   isDark: boolean;
 
@@ -56,6 +67,14 @@ export const LightTheme: ThemeColors = {
   border: 'rgba(60, 60, 67, 0.29)',
   separator: 'rgba(60, 60, 67, 0.29)',
 
+  pressOverlay: 'rgba(0, 0, 0, 0.05)',
+  hoverOverlay: 'rgba(0, 0, 0, 0.03)',
+
+  drawerBorder: 'rgba(0, 0, 0, 0.1)',
+  drawerOverlay: 'rgba(255, 255, 255, 0.6)',
+
+  switchTrackInactive: '#E5E5EA',
+
   isDark: false,
 
   name: 'Light',
@@ -82,6 +101,14 @@ export const DarkTheme: ThemeColors = {
   border: 'rgba(84, 84, 88, 0.6)',
   separator: 'rgba(84, 84, 88, 0.6)',
 
+  pressOverlay: 'rgba(255, 255, 255, 0.1)',
+  hoverOverlay: 'rgba(255, 255, 255, 0.05)',
+
+  drawerBorder: 'rgba(255, 255, 255, 0.1)',
+  drawerOverlay: 'transparent',
+
+  switchTrackInactive: '#4E505B',
+
   isDark: true,
 
   name: 'Dark',
@@ -97,17 +124,25 @@ export const DarkTheme: ThemeColors = {
  */
 export const SepiaTheme: ThemeColors = {
   background: '#FBF0D9',
-  text: '#5F4B32',
+  text: '#000000',
 
   secondaryBackground: '#F5E6C8',
-  secondaryText: 'rgba(95, 75, 50, 0.8)',
-  tertiaryText: 'rgba(95, 75, 50, 0.4)',
+  secondaryText: 'rgba(60, 60, 67, 0.75)',
+  tertiaryText: 'rgba(60, 60, 67, 0.3)',
 
   cardBackground: '#FEFBF3',
   groupedBackground: '#FBF0D9',
 
   border: 'rgba(95, 75, 50, 0.2)',
   separator: 'rgba(95, 75, 50, 0.2)',
+
+  pressOverlay: 'rgba(95, 75, 50, 0.08)',
+  hoverOverlay: 'rgba(95, 75, 50, 0.05)',
+
+  drawerBorder: 'rgba(95, 75, 50, 0.15)',
+  drawerOverlay: 'rgba(251, 240, 217, 0.7)',
+
+  switchTrackInactive: '#E5D9C0',
 
   isDark: false,
 
@@ -123,17 +158,25 @@ export const SepiaTheme: ThemeColors = {
  */
 export const WarmDarkTheme: ThemeColors = {
   background: '#1A1510',
-  text: '#E8D5B5',
+  text: '#FFFFFF',
 
   secondaryBackground: '#2A221A',
-  secondaryText: 'rgba(232, 213, 181, 0.8)',
-  tertiaryText: 'rgba(232, 213, 181, 0.4)',
+  secondaryText: 'rgba(235, 235, 245, 0.75)',
+  tertiaryText: 'rgba(235, 235, 245, 0.3)',
 
   cardBackground: '#2A221A',
   groupedBackground: '#1A1510',
 
   border: 'rgba(232, 213, 181, 0.2)',
   separator: 'rgba(232, 213, 181, 0.2)',
+
+  pressOverlay: 'rgba(232, 213, 181, 0.1)',
+  hoverOverlay: 'rgba(232, 213, 181, 0.05)',
+
+  drawerBorder: 'rgba(232, 213, 181, 0.15)',
+  drawerOverlay: 'transparent',
+
+  switchTrackInactive: '#3A3228',
 
   isDark: true,
 
@@ -161,6 +204,14 @@ export const ParchmentTheme: ThemeColors = {
   border: 'rgba(60, 60, 67, 0.29)',
   separator: 'rgba(60, 60, 67, 0.29)',
 
+  pressOverlay: 'rgba(0, 0, 0, 0.05)',
+  hoverOverlay: 'rgba(0, 0, 0, 0.03)',
+
+  drawerBorder: 'rgba(0, 0, 0, 0.1)',
+  drawerOverlay: 'rgba(250, 249, 245, 0.6)',
+
+  switchTrackInactive: '#E5E5EA',
+
   isDark: false,
 
   name: 'Parchment',
@@ -187,6 +238,14 @@ export const NightTheme: ThemeColors = {
   border: '#262624',
   separator: 'rgba(84, 84, 88, 0.6)',
 
+  pressOverlay: 'rgba(255, 255, 255, 0.1)',
+  hoverOverlay: 'rgba(255, 255, 255, 0.05)',
+
+  drawerBorder: '#262624',
+  drawerOverlay: 'transparent',
+
+  switchTrackInactive: '#3E3E3C',
+
   isDark: true,
 
   name: 'Night',
@@ -212,6 +271,14 @@ export const GreenTheme: ThemeColors = {
 
   border: 'rgba(27, 77, 62, 0.2)',
   separator: 'rgba(27, 77, 62, 0.2)',
+
+  pressOverlay: 'rgba(27, 77, 62, 0.08)',
+  hoverOverlay: 'rgba(27, 77, 62, 0.05)',
+
+  drawerBorder: 'rgba(27, 77, 62, 0.15)',
+  drawerOverlay: 'rgba(213, 232, 212, 0.7)',
+
+  switchTrackInactive: '#BFD9BE',
 
   isDark: false,
 

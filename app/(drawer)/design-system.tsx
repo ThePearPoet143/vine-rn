@@ -9,7 +9,7 @@ import { SettingsList } from '@/components/ui/settings-list';
 import { SectionHeader } from '@/components/ui/section-header';
 import { useFontContext, useThemeContext, type FontFamily } from '@/contexts/preferences-context';
 import { type ThemeMode, Themes } from '@/constants/themes';
-import { getAccentBlue } from '@/constants/colors';
+import { getAccentBlue, getSystemColor } from '@/constants/colors';
 
 type Language = 'en' | 'zh';
 
@@ -451,15 +451,15 @@ export default function DesignSystemScreen() {
                 {t.primaryColors}
               </Typography>
               <View className="flex-row flex-wrap gap-ios-sm">
-                <View style={{ backgroundColor: colors.isDark ? '#0A84FF' : '#007AFF', width: 60, height: 60, borderWidth: 1, borderColor: colors.border, borderRadius: 8 }} />
-                <View style={{ backgroundColor: colors.isDark ? '#30D158' : '#34C759', width: 60, height: 60, borderWidth: 1, borderColor: colors.border, borderRadius: 8 }} />
-                <View style={{ backgroundColor: colors.isDark ? '#5E5CE6' : '#5856D6', width: 60, height: 60, borderWidth: 1, borderColor: colors.border, borderRadius: 8 }} />
-                <View style={{ backgroundColor: colors.isDark ? '#FF9F0A' : '#FF9500', width: 60, height: 60, borderWidth: 1, borderColor: colors.border, borderRadius: 8 }} />
-                <View style={{ backgroundColor: colors.isDark ? '#FF375F' : '#FF2D55', width: 60, height: 60, borderWidth: 1, borderColor: colors.border, borderRadius: 8 }} />
-                <View style={{ backgroundColor: colors.isDark ? '#BF5AF2' : '#AF52DE', width: 60, height: 60, borderWidth: 1, borderColor: colors.border, borderRadius: 8 }} />
-                <View style={{ backgroundColor: colors.isDark ? '#FF453A' : '#FF3B30', width: 60, height: 60, borderWidth: 1, borderColor: colors.border, borderRadius: 8 }} />
-                <View style={{ backgroundColor: colors.isDark ? '#64D2FF' : '#5AC8FA', width: 60, height: 60, borderWidth: 1, borderColor: colors.border, borderRadius: 8 }} />
-                <View style={{ backgroundColor: colors.isDark ? '#FFD60A' : '#FFCC00', width: 60, height: 60, borderWidth: 1, borderColor: colors.border, borderRadius: 8 }} />
+                <View style={{ backgroundColor: getSystemColor('blue', colors.isDark), width: 60, height: 60, borderWidth: 1, borderColor: colors.border, borderRadius: 8 }} />
+                <View style={{ backgroundColor: getSystemColor('green', colors.isDark), width: 60, height: 60, borderWidth: 1, borderColor: colors.border, borderRadius: 8 }} />
+                <View style={{ backgroundColor: getSystemColor('indigo', colors.isDark), width: 60, height: 60, borderWidth: 1, borderColor: colors.border, borderRadius: 8 }} />
+                <View style={{ backgroundColor: getSystemColor('orange', colors.isDark), width: 60, height: 60, borderWidth: 1, borderColor: colors.border, borderRadius: 8 }} />
+                <View style={{ backgroundColor: getSystemColor('pink', colors.isDark), width: 60, height: 60, borderWidth: 1, borderColor: colors.border, borderRadius: 8 }} />
+                <View style={{ backgroundColor: getSystemColor('purple', colors.isDark), width: 60, height: 60, borderWidth: 1, borderColor: colors.border, borderRadius: 8 }} />
+                <View style={{ backgroundColor: getSystemColor('red', colors.isDark), width: 60, height: 60, borderWidth: 1, borderColor: colors.border, borderRadius: 8 }} />
+                <View style={{ backgroundColor: getSystemColor('teal', colors.isDark), width: 60, height: 60, borderWidth: 1, borderColor: colors.border, borderRadius: 8 }} />
+                <View style={{ backgroundColor: getSystemColor('yellow', colors.isDark), width: 60, height: 60, borderWidth: 1, borderColor: colors.border, borderRadius: 8 }} />
               </View>
               <View className="flex-row flex-wrap gap-ios-xs mt-ios-xs">
                 <Typography variant="caption-2" color="tertiary">
@@ -497,12 +497,12 @@ export default function DesignSystemScreen() {
                 {t.grayScale}
               </Typography>
               <View className="flex-row flex-wrap gap-ios-sm">
-                <View style={{ backgroundColor: colors.isDark ? '#8E8E93' : '#8E8E93', width: 60, height: 60, borderWidth: 1, borderColor: colors.border, borderRadius: 8 }} />
-                <View style={{ backgroundColor: colors.isDark ? '#636366' : '#AEAEB2', width: 60, height: 60, borderWidth: 1, borderColor: colors.border, borderRadius: 8 }} />
-                <View style={{ backgroundColor: colors.isDark ? '#48484A' : '#C7C7CC', width: 60, height: 60, borderWidth: 1, borderColor: colors.border, borderRadius: 8 }} />
-                <View style={{ backgroundColor: colors.isDark ? '#3A3A3C' : '#D1D1D6', width: 60, height: 60, borderWidth: 1, borderColor: colors.border, borderRadius: 8 }} />
-                <View style={{ backgroundColor: colors.isDark ? '#2C2C2E' : '#E5E5EA', width: 60, height: 60, borderWidth: 1, borderColor: colors.border, borderRadius: 8 }} />
-                <View style={{ backgroundColor: colors.isDark ? '#1C1C1E' : '#F2F2F7', width: 60, height: 60, borderWidth: 1, borderColor: colors.border, borderRadius: 8 }} />
+                <View style={{ backgroundColor: getSystemColor('gray', colors.isDark), width: 60, height: 60, borderWidth: 1, borderColor: colors.border, borderRadius: 8 }} />
+                <View style={{ backgroundColor: getSystemColor('gray2', colors.isDark), width: 60, height: 60, borderWidth: 1, borderColor: colors.border, borderRadius: 8 }} />
+                <View style={{ backgroundColor: getSystemColor('gray3', colors.isDark), width: 60, height: 60, borderWidth: 1, borderColor: colors.border, borderRadius: 8 }} />
+                <View style={{ backgroundColor: getSystemColor('gray4', colors.isDark), width: 60, height: 60, borderWidth: 1, borderColor: colors.border, borderRadius: 8 }} />
+                <View style={{ backgroundColor: getSystemColor('gray5', colors.isDark), width: 60, height: 60, borderWidth: 1, borderColor: colors.border, borderRadius: 8 }} />
+                <View style={{ backgroundColor: getSystemColor('gray6', colors.isDark), width: 60, height: 60, borderWidth: 1, borderColor: colors.border, borderRadius: 8 }} />
               </View>
             </View>
           </Card>

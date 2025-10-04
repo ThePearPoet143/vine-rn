@@ -24,13 +24,11 @@ export default function DrawerLayout() {
         drawerStyle: {
           width: 280,
           borderRightWidth: 1,
-          borderRightColor: colors.isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)',
+          borderRightColor: colors.drawerBorder,
         },
-        overlayColor: colors.isDark ? 'transparent' : 'rgba(0, 0, 0, 0.3)',
+        overlayColor: colors.drawerOverlay,
         drawerActiveTintColor: colors.text,
-        drawerActiveBackgroundColor: colors.isDark
-          ? 'rgba(255, 255, 255, 0.1)'
-          : 'rgba(0, 0, 0, 0.05)',
+        drawerActiveBackgroundColor: colors.pressOverlay,
         drawerInactiveTintColor: colors.text,
         drawerLabelStyle: {
           marginLeft: 16,
