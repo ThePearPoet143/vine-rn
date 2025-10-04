@@ -18,6 +18,11 @@ interface TypographyProps extends Omit<TextProps, 'children'> {
   variant?: TypographyVariant;
   weight?: 'regular' | 'medium' | 'semibold' | 'bold';
   color?: 'label' | 'secondary' | 'tertiary' | 'quaternary';
+  /**
+   * Disable Dynamic Type scaling (use for decorative text only)
+   * @default false
+   */
+  disableScaling?: boolean;
   children: ReactNode;
 }
 
@@ -53,6 +58,7 @@ export function Typography({
   variant = 'body',
   weight = 'regular',
   color = 'label',
+  disableScaling = false,
   children,
   className = '',
   ...props
@@ -62,7 +68,12 @@ export function Typography({
   const colorClass = colorStyles[color];
 
   return (
-    <Text className={`font-sf-pro ${variantClass} ${weightClass} ${colorClass} ${className}`} {...props}>
+    <Text
+      className={`${variantClass} ${weightClass} ${colorClass} ${className}`}
+      allowFontScaling={!disableScaling}
+      maxFontSizeMultiplier={disableScaling ? 1 : 3}
+      {...props}
+    >
       {children}
     </Text>
   );

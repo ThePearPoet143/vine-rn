@@ -1,5 +1,6 @@
 import React from 'react';
-import { Pressable, Text, ActivityIndicator, type PressableProps } from 'react-native';
+import { Pressable, ActivityIndicator, type PressableProps } from 'react-native';
+import { Typography } from './typography';
 
 export type ButtonStyle = 'filled' | 'tinted' | 'plain' | 'bordered';
 export type ButtonRole = 'normal' | 'destructive' | 'cancel';
@@ -68,21 +69,36 @@ const getTextColor = (style: ButtonStyle, role: ButtonRole): string => {
   return style === 'filled' ? 'text-white' : 'text-ios-blue dark:text-ios-blue-dark';
 };
 
-const sizeStyles: Record<ButtonSize, { container: string; text: string; minHeight: string }> = {
+const sizeStyles: Record<
+  ButtonSize,
+  {
+    container: string;
+    padding: string;
+    minHeight: string;
+    variant: 'subheadline' | 'body' | 'headline';
+    weight: 'medium' | 'semibold';
+  }
+> = {
   sm: {
     container: 'px-ios-md rounded-ios-sm',
-    text: 'text-ios-subheadline font-ios-medium',
+    padding: 'py-ios-xs',
     minHeight: 'min-h-[36px]',
+    variant: 'subheadline',
+    weight: 'medium',
   },
   md: {
     container: 'px-ios-md rounded-ios-md',
-    text: 'text-ios-body font-ios-medium',
+    padding: 'py-ios-sm',
     minHeight: 'min-h-[44px]', // iOS minimum touch target
+    variant: 'body',
+    weight: 'medium',
   },
   lg: {
     container: 'px-ios-lg rounded-ios-lg',
-    text: 'text-ios-headline font-ios-semibold',
+    padding: 'py-ios-md',
     minHeight: 'min-h-[50px]',
+    variant: 'headline',
+    weight: 'semibold',
   },
 };
 
@@ -114,13 +130,15 @@ export function Button({
   return (
     <Pressable
       disabled={isDisabled}
-      className={`${buttonStyles} ${sizeClass.container} ${sizeClass.minHeight} ${widthClass} ${disabledClass} ${className} items-center justify-center flex-row`}
+      className={`${buttonStyles} ${sizeClass.container} ${sizeClass.padding} ${sizeClass.minHeight} ${widthClass} ${disabledClass} ${className} items-center justify-center flex-row`}
       {...props}
     >
       {loading ? (
         <ActivityIndicator color={spinnerColor} />
       ) : (
-        <Text className={`${sizeClass.text} ${textColor} text-center`}>{children}</Text>
+        <Typography variant={sizeClass.variant} weight={sizeClass.weight} className={`${textColor} text-center`}>
+          {children}
+        </Typography>
       )}
     </Pressable>
   );

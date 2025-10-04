@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, ScrollView, useWindowDimensions } from 'react-native';
+import { View, ScrollView, useWindowDimensions } from 'react-native';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -28,20 +28,32 @@ export default function DesignSystemScreen() {
             Device Information
           </Typography>
           <View className="gap-ios-xs">
-            <Text className="text-ios-body text-ios-secondary-label dark:text-ios-secondary-label-dark">
-              <Text className="font-ios-semibold text-ios-label dark:text-ios-label-dark">Screen Width:</Text>{' '}
-              {width.toFixed(0)}px
-            </Text>
-            <Text className="text-ios-body text-ios-secondary-label dark:text-ios-secondary-label-dark">
-              <Text className="font-ios-semibold text-ios-label dark:text-ios-label-dark">Typography:</Text> SF Pro
-              (Dynamic Type)
-            </Text>
-            <Text className="text-ios-body text-ios-secondary-label dark:text-ios-secondary-label-dark">
-              <Text className="font-ios-semibold text-ios-label dark:text-ios-label-dark">Color System:</Text> iOS
-              Semantic Colors
-            </Text>
+            <Typography variant="body" color="secondary">
+              <Typography variant="body" weight="semibold">Screen Width:</Typography> {width.toFixed(0)}px
+            </Typography>
+            <Typography variant="body" color="secondary">
+              <Typography variant="body" weight="semibold">Typography:</Typography> SF Pro (Dynamic Type)
+            </Typography>
+            <Typography variant="body" color="secondary">
+              <Typography variant="body" weight="semibold">Color System:</Typography> iOS Semantic Colors
+            </Typography>
           </View>
         </Card>
+
+        {/* Dynamic Type Demo */}
+        <View className="mb-ios-lg">
+          <Typography variant="title-2" weight="bold" className="mb-ios-sm">
+            iOS Dynamic Type
+          </Typography>
+          <Card variant="inset-grouped" className="gap-ios-sm">
+            <Typography variant="body" color="secondary">
+              All text in this app automatically scales with iOS Text Size settings. Try changing it in Settings {'->'} Accessibility {'->'} Display & Text Size {'->'} Larger Text.
+            </Typography>
+            <Alert type="info" title="Accessibility Support">
+              Text automatically scales with your device settings for optimal readability. This design system supports all iOS Dynamic Type sizes including accessibility sizes.
+            </Alert>
+          </Card>
+        </View>
 
         {/* Typography */}
         <View className="mb-ios-lg">
