@@ -60,6 +60,12 @@ export default function DrawerLayout() {
         },
       }}>
       <Drawer.Screen
+        name="index"
+        options={{
+          drawerItemStyle: { display: 'none' },
+        }}
+      />
+      <Drawer.Screen
         name="home"
         options={{
           drawerLabel: 'Home',
