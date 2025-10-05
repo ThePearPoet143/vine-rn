@@ -81,17 +81,31 @@ feat: Add development environment setup
 ## Master Document Folder
 
 ### Purpose
-The `@master-document` folder contains:
+The `@master-document` folder (singular, not plural) contains:
 - Project guidelines and standards
 - Technical documentation
 - Process documentation (CI/CD, deployment, etc.)
 - Reference materials
+- Navigation and theme patterns
 
-### Organization
+### Directory Structure
+```
+@master-document/
+├── README.md                    # Overview and quick reference
+├── accessibility/               # Accessibility features
+├── deployment/                  # CI/CD and deployment guides
+├── navigation/                  # Navigation patterns
+├── theme/                       # Theme system architecture
+├── branching-strategy.md        # Git Flow workflow
+└── claude.md                    # This file
+```
+
+### Organization Standards
 - One topic per document
 - Link between related documents
 - Keep documents updated as project evolves
 - Archive outdated documentation rather than deleting
+- Always use `@master-document` (singular) as the standard location
 
 ## Version Control
 
@@ -288,4 +302,4 @@ git push origin v1.0.0
 - Configure EAS Build webhooks in project settings
 - Add automation triggers for branch merges
 
-For complete CI/CD documentation, see [ci-cd.md](ci-cd.md) and [tldr-ci-cd.md](tldr-ci-cd.md).
+For complete CI/CD documentation, see [deployment/ci-cd.md](deployment/ci-cd.md) and [deployment/tldr-ci-cd.md](deployment/tldr-ci-cd.md).

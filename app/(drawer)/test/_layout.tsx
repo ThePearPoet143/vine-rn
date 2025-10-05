@@ -4,14 +4,13 @@ import { DrawerToggleButton } from '@react-navigation/drawer';
 import { useThemeContext } from '@/contexts/preferences-context';
 
 /**
- * Settings stack navigator
+ * Test stack navigator
  *
  * Navigation structure:
- * - Settings (index) - Main settings list
- * - Appearance - Theme and font customization
- * - Language - Language selection
+ * - Test (index) - Main test screen with drawer icon
+ * - Detail - Test detail screen with back button
  */
-export default function SettingsLayout() {
+export default function TestLayout() {
   const { colors } = useThemeContext();
 
   return (
@@ -27,20 +26,14 @@ export default function SettingsLayout() {
       <Stack.Screen
         name="index"
         options={{
-          title: 'Settings',
+          title: 'Test Screen',
           headerLeft: () => <DrawerToggleButton tintColor={colors.text} />,
         }}
       />
       <Stack.Screen
-        name="appearance"
+        name="detail"
         options={{
-          title: 'Appearance',
-        }}
-      />
-      <Stack.Screen
-        name="language"
-        options={{
-          title: 'Language',
+          title: 'Test Detail',
         }}
       />
     </Stack>

@@ -4,14 +4,12 @@ import { DrawerToggleButton } from '@react-navigation/drawer';
 import { useThemeContext } from '@/contexts/preferences-context';
 
 /**
- * Settings stack navigator
+ * Home stack navigator
  *
  * Navigation structure:
- * - Settings (index) - Main settings list
- * - Appearance - Theme and font customization
- * - Language - Language selection
+ * - Home (index) - Main home screen with drawer icon
  */
-export default function SettingsLayout() {
+export default function HomeLayout() {
   const { colors } = useThemeContext();
 
   return (
@@ -27,20 +25,8 @@ export default function SettingsLayout() {
       <Stack.Screen
         name="index"
         options={{
-          title: 'Settings',
+          title: 'Vine',
           headerLeft: () => <DrawerToggleButton tintColor={colors.text} />,
-        }}
-      />
-      <Stack.Screen
-        name="appearance"
-        options={{
-          title: 'Appearance',
-        }}
-      />
-      <Stack.Screen
-        name="language"
-        options={{
-          title: 'Language',
         }}
       />
     </Stack>

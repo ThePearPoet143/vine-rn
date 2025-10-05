@@ -1,5 +1,6 @@
 import { Drawer } from 'expo-router/drawer';
 import React from 'react';
+import { DrawerToggleButton } from '@react-navigation/drawer';
 
 import { IconSymbol } from '@/components/ui/icon-symbol';
 import { CustomDrawerContent } from '@/components/custom-drawer-content';
@@ -51,6 +52,7 @@ export default function DrawerLayout() {
         headerStyle: {
           backgroundColor: colors.background,
         },
+        headerShadowVisible: false,
         headerTintColor: colors.text,
         headerTitleStyle: {
           fontWeight: '600',
@@ -58,12 +60,24 @@ export default function DrawerLayout() {
         },
       }}>
       <Drawer.Screen
-        name="index"
+        name="home"
         options={{
           drawerLabel: 'Home',
           title: 'Vine',
+          headerShown: false,
           drawerIcon: ({ color }) => (
             <IconSymbol size={28} name="book.fill" color={color} />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="notes"
+        options={{
+          drawerLabel: 'Notes',
+          title: 'Notes',
+          headerShown: false,
+          drawerIcon: ({ color }) => (
+            <IconSymbol size={28} name="note.text" color={color} />
           ),
         }}
       />
@@ -74,6 +88,17 @@ export default function DrawerLayout() {
           title: 'Design System',
           drawerIcon: ({ color }) => (
             <IconSymbol size={28} name="paintpalette.fill" color={color} />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="test"
+        options={{
+          drawerLabel: 'Test',
+          title: 'Test Screen',
+          headerShown: false,
+          drawerIcon: ({ color }) => (
+            <IconSymbol size={28} name="flask.fill" color={color} />
           ),
         }}
       />
